@@ -34,14 +34,10 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import Reveal from './Reveal'
 import BlogPostCard, { PostMeta, PostTile } from './BlogPostCard'
-import { BLOG_TRACKS, publishedPosts } from '../data/blog'
+import { BLOG_DESCRIPTION, BLOG_TITLE, BLOG_TRACKS, publishedPosts } from '../data/blog'
 import { RESOURCES } from '../data/resources'
 import { useSeo } from '../lib/useSeo'
 import { pageJsonLd } from '../lib/pageSchema'
-
-export const BLOG_TITLE = 'Blog — Cooper'
-export const BLOG_DESCRIPTION =
-  'Notes from the people building AI for commercial insurance. Engineering deep dives, where the industry is heading, and brokers on their own work. A new post every Thursday.'
 
 const PAGE_PATH = '/resources/blog'
 
@@ -112,12 +108,14 @@ export default function BlogIndexPage() {
               Notes from the people building AI for insurance
             </h1>
             <p className="max-w-[620px] pt-[20px] font-sans text-[17px] leading-[1.55] text-muted">
-              Three tracks, one post every Thursday.
+              Four tracks, one post every Thursday.
             </p>
           </Reveal>
 
           <Reveal delay={80}>
-            <div className="mt-[48px] grid gap-[16px] md:grid-cols-3">
+            {/* Four tracks: 2-up on tablet, 4-up on desktop. A three-column
+                legend would strand the fourth card on its own row. */}
+            <div className="mt-[48px] grid gap-[16px] sm:grid-cols-2 lg:grid-cols-4">
               {BLOG_TRACKS.map((track) => (
                 <div
                   key={track.id}

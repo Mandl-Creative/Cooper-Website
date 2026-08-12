@@ -21,7 +21,19 @@
  * ─────────────────────────────────────────────────────────────────────────
  */
 
-export type BlogTrackId = 'engineering' | 'state-of-insurance' | 'industry-insider'
+/* The index page's own SEO strings live here rather than in the component so
+   prerender.cjs can read them through the SSR entry's re-export. They used to
+   be duplicated in the route list, which is the drift the persona and white
+   paper modules both carry warnings about. */
+export const BLOG_TITLE = 'Blog — Cooper'
+export const BLOG_DESCRIPTION =
+  'Notes from the people building AI for commercial insurance. Where the industry is heading, engineering deep dives, customer results, and conversations with people across the market. A new post every Thursday.'
+
+export type BlogTrackId =
+  | 'state-of-insurance'
+  | 'engineering'
+  | 'customer-success'
+  | 'industry-insider'
 
 /** Track metadata drives the hero legend, the card tags and (later) the filter
     chips from one place, so a renamed track cannot say two things on one page. */
@@ -31,9 +43,12 @@ export interface BlogTrack {
   label: string
   /** One line for the hero legend. */
   blurb: string
+  /** Roughly what share of posts this track should carry. Editorial guidance,
+      not enforced anywhere — it exists so the mix is written down. */
+  share: string
   /** Fill for the card's fallback tile when a hero image is missing. Existing
       palette tokens only — the blog does not introduce new colours. */
-  tint: 'accent-orange' | 'dark' | 'muted'
+  tint: 'accent-orange' | 'accent-orange-deep' | 'dark' | 'muted'
 }
 
 export interface BlogAuthor {
@@ -66,24 +81,40 @@ export interface BlogPost {
   draft?: boolean
 }
 
+/* Four tracks, in rotation order. Customer success and industry insider began
+   as one bucket and were split on 12 Aug: a customer describing results with
+   Cooper and an industry figure describing the market are different pitches to
+   a reader, and the second is far easier to get a yes on. Keeping them separate
+   means a quiet quarter for customer references does not also stop the
+   interview track. */
 export const BLOG_TRACKS: BlogTrack[] = [
-  {
-    id: 'engineering',
-    label: 'Engineering',
-    blurb: 'How Cooper is built, and how we measure whether it works.',
-    tint: 'accent-orange',
-  },
   {
     id: 'state-of-insurance',
     label: 'State of Insurance',
     blurb: 'Where commercial insurance and AI are actually heading.',
+    share: '50%',
     tint: 'dark',
+  },
+  {
+    id: 'engineering',
+    label: 'Engineering',
+    blurb: 'How Cooper is built, and how we measure whether it works.',
+    share: '30%',
+    tint: 'accent-orange',
+  },
+  {
+    id: 'customer-success',
+    label: 'Customer Success',
+    blurb: 'What changed for teams already running Cooper.',
+    share: '10%',
+    tint: 'muted',
   },
   {
     id: 'industry-insider',
     label: 'Industry Insider',
-    blurb: 'Brokers on their own work, in their own words.',
-    tint: 'muted',
+    blurb: 'Conversations with people across the insurance world.',
+    share: '10%',
+    tint: 'accent-orange-deep',
   },
 ]
 
@@ -140,9 +171,12 @@ export const BLOG_POSTS: BlogPost[] = [
     seoDescription:
       'A stage-by-stage time breakdown of one commercial P&C submission: intake, loss runs, ACORD forms, carrier portals and quote comparison. Where the hours actually go.',
   },
+  /* Customer success, not industry insider: this is a Cooper customer on their
+     own results. Industry insider is someone in the market who need not be a
+     customer at all. */
   {
-    slug: 'industry-insider-renewal-prep',
-    track: 'industry-insider',
+    slug: 'agency-renewal-prep-case-study',
+    track: 'customer-success',
     title: 'How one agency cut renewal prep from three hours to fifteen minutes',
     excerpt:
       'A commercial broker on what their week looked like before, what they handed over first, and the part they still do by hand.',
@@ -175,6 +209,21 @@ export const BLOG_POSTS: BlogPost[] = [
     seoTitle: 'Carrier Portal Automation in 2026: What Works — Cooper',
     seoDescription:
       'Automating carrier portal submissions is where broker time is won or lost. What works today, what does not, and how to evaluate a tool that claims to do it.',
+  },
+  /* Opens the industry insider track. Rochelle is the first approach, and the
+     reason the track is worth having: she has a network to tap well beyond her
+     own interview, and none of it depends on someone being a Cooper customer. */
+  {
+    slug: 'industry-insider-rochelle',
+    track: 'industry-insider',
+    title: 'Industry Insider: what the last five years changed about placing risk',
+    excerpt:
+      'The first in a series of conversations with people across the insurance world about how the work is actually shifting, and what they think is noise.',
+    author: HOUSE,
+    publishedAt: '2026-10-08',
+    seoTitle: 'Industry Insider: How Placing Risk Is Changing — Cooper',
+    seoDescription:
+      'A conversation about how commercial insurance distribution is changing, what technology has actually altered day to day, and what has not moved at all.',
   },
 ]
 

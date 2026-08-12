@@ -108,7 +108,12 @@ function inlineEntryCss(html) {
 }
 
 async function main() {
-  const { render: renderBody, publishedPosts } = await import('../dist-ssr/entry-server.js')
+  const {
+    render: renderBody,
+    publishedPosts,
+    BLOG_TITLE,
+    BLOG_DESCRIPTION,
+  } = await import('../dist-ssr/entry-server.js')
   const template = inlineEntryCss(fs.readFileSync(path.join(DIST, 'index.html'), 'utf8'))
 
   // Blog routes come from src/data/blog.ts via the SSR entry's re-export, so
@@ -121,7 +126,7 @@ async function main() {
 
   const allRoutes = [
     ...routes,
-    { path: '/resources/blog', title: 'Blog — Cooper', description: 'Notes from the people building AI for commercial insurance. Engineering deep dives, where the industry is heading, and brokers on their own work. A new post every Thursday.', ogImage: DEFAULT_OG },
+    { path: '/resources/blog', title: BLOG_TITLE, description: BLOG_DESCRIPTION, ogImage: DEFAULT_OG },
     ...publishedPosts.map((post) => ({
       path: `/resources/blog/${post.slug}`,
       title: post.seoTitle,

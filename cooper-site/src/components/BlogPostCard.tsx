@@ -6,6 +6,7 @@ import { formatPostDate, trackById, type BlogPost } from '../data/blog'
    from the tint value at runtime. */
 const TINT_CLASS: Record<string, string> = {
   'accent-orange': 'bg-accent-orange text-cream-light',
+  'accent-orange-deep': 'bg-accent-orange-deep text-cream-light',
   dark: 'bg-dark text-cream-light',
   muted: 'bg-muted text-cream-light',
 }
