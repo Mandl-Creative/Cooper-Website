@@ -108,10 +108,29 @@ function inlineEntryCss(html) {
 }
 
 async function main() {
-  const { render: renderBody } = await import('../dist-ssr/entry-server.js')
+  const { render: renderBody, publishedPosts } = await import('../dist-ssr/entry-server.js')
   const template = inlineEntryCss(fs.readFileSync(path.join(DIST, 'index.html'), 'utf8'))
 
-  for (const route of routes) {
+  // Blog routes come from src/data/blog.ts via the SSR entry's re-export, so
+  // publishing a post is a content file plus one array entry — no route to
+  // register here and no sitemap line to add by hand. Fail loudly if the
+  // re-export goes missing; silently shipping zero blog pages is worse.
+  if (!Array.isArray(publishedPosts)) {
+    throw new Error('prerender: entry-server did not export publishedPosts — check the re-export in src/entry-server.tsx')
+  }
+
+  const allRoutes = [
+    ...routes,
+    { path: '/resources/blog', title: 'Blog — Cooper', description: 'Notes from the people building AI for commercial insurance. Engineering deep dives, where the industry is heading, and brokers on their own work. A new post every Thursday.', ogImage: DEFAULT_OG },
+    ...publishedPosts.map((post) => ({
+      path: `/resources/blog/${post.slug}`,
+      title: post.seoTitle,
+      description: post.seoDescription,
+      ogImage: DEFAULT_OG,
+    })),
+  ]
+
+  for (const route of allRoutes) {
     const outFile = path.join(DIST, `${route.path.replace(/^\//, '')}.html`)
     fs.mkdirSync(path.dirname(outFile), { recursive: true })
     fs.writeFileSync(outFile, injectBody(render(template, route), route.path, await renderBody(route.path)))
@@ -129,7 +148,7 @@ async function main() {
   //     (changefreq / priority are ignored). Build time is a fine proxy
   //     because these are static pages that only change on deploy.
   const lastmod = new Date().toISOString().slice(0, 10)
-  const sitemapPaths = ['/', ...routes.filter((r) => !r.noindex).map((r) => r.path)]
+  const sitemapPaths = ['/', ...allRoutes.filter((r) => !r.noindex).map((r) => r.path)]
   const sitemap = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
@@ -146,7 +165,7 @@ async function main() {
   const robots = [`User-agent: *`, `Allow: /`, ``, `Sitemap: ${ORIGIN}/sitemap.xml`, ``].join('\n')
   fs.writeFileSync(path.join(DIST, 'robots.txt'), robots)
 
-  console.log(`prerendered ${routes.length + 1} routes + sitemap.xml + robots.txt`)
+  console.log(`prerendered ${allRoutes.length + 1} routes + sitemap.xml + robots.txt`)
 }
 
 main().catch((err) => {

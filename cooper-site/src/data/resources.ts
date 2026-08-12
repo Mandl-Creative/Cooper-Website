@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import { Plugs, FileText, Calculator } from '@phosphor-icons/react'
+import { Plugs, FileText, Calculator, Article } from '@phosphor-icons/react'
 
 /**
  * The Resources catalog — one list behind the Resources nav dropdown and the
@@ -31,6 +31,12 @@ const roiCalculator: Resource = {
 }
 
 export const RESOURCES: Resource[] = [
+  {
+    to: '/resources/blog',
+    title: 'Blog',
+    desc: 'Engineering, industry and broker stories. A new post every Thursday.',
+    icon: Article,
+  },
   {
     to: '/integrations',
     title: 'Integrations',

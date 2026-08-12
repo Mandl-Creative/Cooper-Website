@@ -10,6 +10,18 @@ import { prerender } from 'react-dom/static'
 import { StaticRouter } from 'react-router-dom'
 import App from './App.tsx'
 
+/*
+ * Deliberate second job for this module: prerender.cjs is CommonJS and cannot
+ * require a .ts file, so data-driven routes have historically been re-derived
+ * by grepping the source (see how personas are handled). This module is already
+ * imported by the build script as compiled ES, so re-exporting the blog list
+ * hands it the real, typechecked array instead of a regex approximation.
+ *
+ * Keep this export. Removing it makes the build emit zero blog pages, which
+ * prerender.cjs turns into a hard error rather than a silent omission.
+ */
+export { publishedPosts } from './data/blog'
+
 export async function render(url: string): Promise<string> {
   const { prelude } = await prerender(
     <StrictMode>
