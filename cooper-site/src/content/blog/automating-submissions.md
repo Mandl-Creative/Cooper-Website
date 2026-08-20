@@ -30,9 +30,9 @@ You do not need our product to use them. You need them more if you are evaluatin
 
 ## What this blog will be
 
-Three tracks, rotating, one post every Thursday.
+Four tracks, rotating, one post every Thursday.
 
-**Engineering** is how the thing is built and how we measure whether it works, including the numbers that are not flattering. **State of Insurance** is where the industry is going and what that means for a brokerage deciding when to move. **Industry Insider** is brokers on their own work, in their own words, including the parts where our software annoyed them.
+**State of Insurance** is where the industry is going and what that means for a brokerage deciding when to move. **Engineering** is how the thing is built and how we measure whether it works, including the numbers that are not flattering. **Customer Success** is what changed for teams already running Cooper. **Industry Insider** is conversations with people across the market, in their own words, including the parts where our software annoyed them.
 
 We would rather publish something specific and occasionally awkward than something polished and empty. That is a low bar to set publicly, which is why we are setting it here in the first post.
 

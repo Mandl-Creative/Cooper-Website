@@ -1,71 +1,71 @@
 /* ──────────────────────────────────────────────────────────────
    Blog — /resources/blog
 
-   Structured after Harvey, Glean and Gamma, which converge on the
-   same three things: one distinguished lead post, a card of
-   image + tag + date + title, and a finite page that ends on a
-   capture slot rather than on nothing. Abridge is the counter-
-   example — a wall of undifferentiated title-and-date rows that
-   only survives on volume.
+   The clean take, after Function Health's article index. Chosen
+   over the earlier split-hero layout, which is deleted; anything
+   at /resources/blog-b is the next candidate being compared
+   against this, not a second blog.
 
-   Two deliberate departures, both because Cooper's archive will be
-   thin by design for a quarter:
+   What makes that reference read as clean is not what it adds, it
+   is what it leaves out. There is no featured slot, no excerpt, no
+   byline, no read time, and no date. There is no card either: the
+   picture sits straight on the page with nothing drawn around it.
+   Every row is the same three columns of the same three parts,
+   image, category, title, and the eye stops having to re-learn the
+   layout on the way down.
 
-     · The hero states the three tracks and the weekly cadence.
-       Every reference blog is an established publication where a
-       short archive would read as neglect. Saying "three tracks,
-       one post every Thursday" turns "there are only five posts"
-       into "this launched five weeks ago and is on schedule".
+   So this page is subtraction applied on purpose:
 
-     · The two existing resources are injected into the card grid
-       rather than parked in a footer band. This fills the grid at
-       low post counts and puts the conversion path inside the
-       reading flow, which is the job the blog is actually here to
-       do.
+     · No lead post. A uniform grid all the way down, which is what
+       makes the rhythm hold.
 
-   No pagination, no search, no read time, no filter chips. See
-   FILTER_MIN_POSTS in src/data/blog.ts for when chips earn their
-   place.
+     · Cards carry a chip and a title. Nothing else. The excerpt,
+       the author and the date all moved to the post page, which is
+       where a reader who has decided to read will be.
+
+     · No box. No border, no fill, no shadow. The rounded picture
+       is the whole card, and the page ground shows through
+       everywhere else.
+
+   Two things it keeps from Cooper rather than from the reference:
+   the title stays in the serif (the reference sets a bold sans,
+   but Cooper's headings are serif everywhere else and the
+   aesthetic is the layout, not the typeface), and scheduled posts
+   stay in the grid, greyed and dateless-but-labelled.
+
+   The one line that does not move: a scheduled card is a div, not
+   an anchor. It has no URL, no prerendered route and no sitemap
+   entry.
 ─────────────────────────────────────────────────────────────── */
 
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight } from '@phosphor-icons/react'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import Reveal from './Reveal'
-import BlogPostCard, { PostMeta, PostTile } from './BlogPostCard'
-import { BLOG_DESCRIPTION, BLOG_TITLE, BLOG_TRACKS, publishedPosts } from '../data/blog'
-import { RESOURCES } from '../data/resources'
+import { PostTile } from './BlogPostCard'
+import {
+  BLOG_DESCRIPTION,
+  BLOG_TITLE,
+  BLOG_TRACKS,
+  formatShortDate,
+  publishedPosts,
+  trackById,
+  upcomingPosts,
+  type BlogPost,
+} from '../data/blog'
 import { useSeo } from '../lib/useSeo'
 import { pageJsonLd } from '../lib/pageSchema'
 
 const PAGE_PATH = '/resources/blog'
 
-/* The two resources that ride in the card grid. Pulled from the same catalog
-   that feeds the nav dropdown and the footer, so a retitle lands everywhere.
-   Not the white paper: it is post one, and a page should not offer the same
-   destination twice in one grid under two different framings. */
-const GRID_RESOURCES = ['/resources/roi-calculator', '/integrations']
-  .map((to) => RESOURCES.find((r) => r.to === to))
-  .filter((r): r is (typeof RESOURCES)[number] => Boolean(r))
+/** The site's container, matched to the navbar so every band lines up. */
+const SHELL = 'mx-auto max-w-[1440px] px-5 md:px-10 lg:px-[62px]'
 
-/** Where each resource card sits in the stream, once the featured post is out. */
-const RESOURCE_SLOTS = [2, 6]
-
-/**
- * How many resource cards to inject.
- *
- * Two, unless two would leave exactly one card alone on the final row. A lone
- * trailing card reads as a layout bug rather than as a deliberate slot, and at
- * five posts that is precisely what happens: 5 + 2 = 7, and 7 wraps to 3 + 3 + 1.
- * Dropping to one gives 6, which is two full rows.
- */
-function resourceCount(posts: number, columns: number): number {
-  const orphaned = (n: number) => (posts + n) % columns === 1
-  if (!orphaned(2)) return 2
-  if (!orphaned(1)) return 1
-  return 2
-}
+/* Squarer than the 16:9 the grid used before. The reference crops nearer to
+   4:3, which gives a row of pictures more presence when the picture is the only
+   thing carrying the card. */
+const CROP = 'aspect-[4/3]'
 
 export default function BlogIndexPage() {
   useSeo({
@@ -75,172 +75,216 @@ export default function BlogIndexPage() {
     jsonLd: pageJsonLd({ name: 'Blog', path: PAGE_PATH, description: BLOG_DESCRIPTION }),
   })
 
-  const [featured, ...rest] = publishedPosts
+  /* `null` is "All". Filtering happens in the browser over a handful of posts,
+     so there is nothing to paginate and nothing to fetch. */
+  const [track, setTrack] = useState<string | null>(null)
+  const match = (p: BlogPost) => track === null || p.track === track
 
-  /* Interleave posts and resource cards into one stream, so the grid never has
-     to reason about two lists. Slots past the end simply append. */
-  const stream: Array<
-    { kind: 'post'; key: string; post: (typeof publishedPosts)[number] } | { kind: 'resource'; key: string; resource: (typeof GRID_RESOURCES)[number] }
-  > = rest.map((post) => ({ kind: 'post' as const, key: post.slug, post }))
-
-  /* Below five items a three-column grid leaves an orphan in a nearly empty
-     row, which reads as broken. Two columns keeps it composed. */
-  const cols = rest.length + 2 <= 4 ? 2 : 3
-  const columns = cols === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'
-
-  GRID_RESOURCES.slice(0, resourceCount(rest.length, cols)).forEach((resource, i) => {
-    const at = Math.min(RESOURCE_SLOTS[i] ?? stream.length, stream.length)
-    stream.splice(at + i, 0, { kind: 'resource', key: resource.to, resource })
-  })
+  const published = publishedPosts.filter(match)
+  const upcoming = upcomingPosts.filter(match)
+  const empty = published.length === 0 && upcoming.length === 0
 
   return (
     <div className="min-h-screen bg-cream-light">
       <Navbar variant="light" />
 
-      {/* ── Hero + track legend ────────────────────────────────── */}
-      <section className="bg-cream px-5 pb-[64px] pt-[140px] md:px-10 md:pt-[160px] lg:px-[62px]">
-        <div className="mx-auto max-w-[1180px]">
+      {/* ── Masthead ──────────────────────────────────────────────
+          Centred, serif, and carrying one line under it. The
+          reference runs title-only, but it is an established
+          archive; a blog in its first month still has to say what
+          it is and how often it arrives. */}
+      <header className="pb-[40px] pt-[128px] md:pb-[48px] md:pt-[150px] lg:pt-[168px]">
+        <div className={SHELL}>
           <Reveal>
-            <p className="font-grotesk text-[12px] font-medium uppercase tracking-[0.14em] text-accent-orange">
-              Blog
-            </p>
-            <h1 className="max-w-[820px] pt-[16px] font-serif text-[38px] leading-[1.08] tracking-[-0.5px] text-dark md:text-[52px] lg:text-[58px]">
-              Notes from the people building AI for insurance
-            </h1>
-            <p className="max-w-[620px] pt-[20px] font-sans text-[17px] leading-[1.55] text-muted">
-              Four tracks, one post every Thursday.
-            </p>
-          </Reveal>
-
-          <Reveal delay={80}>
-            {/* Four tracks: 2-up on tablet, 4-up on desktop. A three-column
-                legend would strand the fourth card on its own row. */}
-            <div className="mt-[48px] grid gap-[16px] sm:grid-cols-2 lg:grid-cols-4">
-              {BLOG_TRACKS.map((track) => (
-                <div
-                  key={track.id}
-                  className="rounded-[16px] border border-dark/10 bg-cream-light/60 p-[22px]"
+            <div className="mx-auto max-w-[760px] text-center">
+              <h1 className="font-serif text-[38px] leading-[1.1] tracking-[-0.5px] text-dark md:text-[52px]">
+                Notes from the people{' '}
+                <span
+                  className="inline-block"
+                  style={{ borderBottom: '1.5px dashed rgba(217,86,17,0.55)', paddingBottom: '4px' }}
                 >
-                  <h2 className="font-grotesk text-[12px] font-medium uppercase tracking-[0.12em] text-accent-orange">
-                    {track.label}
-                  </h2>
-                  <p className="pt-[10px] font-sans text-[14.5px] leading-[1.5] text-muted">
-                    {track.blurb}
-                  </p>
-                </div>
-              ))}
+                  building AI
+                </span>{' '}
+                for insurance
+              </h1>
+              <p className="mx-auto max-w-[540px] pt-[20px] font-sans text-[16px] leading-[1.6] text-muted">
+                Four tracks, one post every Thursday.
+              </p>
             </div>
           </Reveal>
         </div>
-      </section>
+      </header>
 
-      {/* ── Featured ───────────────────────────────────────────── */}
-      {featured && (
-        <section className="px-5 pt-[72px] md:px-10 lg:px-[62px]">
-          <div className="mx-auto max-w-[1180px]">
-            <Reveal>
-              <h2 className="font-grotesk text-[12px] font-medium uppercase tracking-[0.12em] text-muted">
-                Latest
-              </h2>
-            </Reveal>
-            <Reveal delay={60}>
-              <article className="group mt-[20px]">
-                <Link
-                  to={`/resources/blog/${featured.slug}`}
-                  className="grid gap-[28px] lg:grid-cols-2 lg:items-center lg:gap-[48px]"
-                >
-                  <PostTile post={featured} eager />
-                  <div>
-                    <PostMeta post={featured} />
-                    <h3 className="pt-[12px] font-serif text-[28px] leading-[1.12] text-dark group-hover:text-accent-orange md:text-[36px]">
-                      {featured.title}
-                    </h3>
-                    <p className="max-w-[520px] pt-[14px] font-sans text-[16px] leading-[1.55] text-muted">
-                      {featured.excerpt}
-                    </p>
-                    <p className="pt-[18px] font-grotesk text-[13px] text-dark">
-                      {featured.author.name}
-                      <span className="text-muted"> · {featured.author.role}</span>
-                    </p>
-                    <span className="mt-[18px] inline-flex items-center gap-[8px] font-grotesk text-[14px] font-medium text-accent-orange">
-                      Read the post
-                      <ArrowRight size={16} weight="regular" />
-                    </span>
-                  </div>
-                </Link>
-              </article>
-            </Reveal>
-          </div>
-        </section>
-      )}
+      {/* ── Filter ────────────────────────────────────────────────
+          Outlined pills with one filled active state, the shape the
+          reference uses and the shape readers already know. */}
+      <nav aria-label="Filter posts by track" className="pb-[44px]">
+        <div className={SHELL}>
+          <Reveal>
+            <div className="flex flex-wrap items-center justify-center gap-x-[10px] gap-y-[10px]">
+              <span className="font-sans text-[14px] text-muted">Filter by:</span>
+              {[{ id: null, label: 'All' }, ...BLOG_TRACKS.map((t) => ({ id: t.id, label: t.label }))].map(
+                (tab) => {
+                  const active = track === tab.id
+                  return (
+                    <button
+                      key={tab.label}
+                      type="button"
+                      onClick={() => setTrack(tab.id)}
+                      aria-pressed={active}
+                      className={`cursor-pointer rounded-full border px-[18px] py-[8px] font-sans text-[14px] transition-colors duration-200 ${
+                        active
+                          ? 'border-dark bg-dark text-cream-light'
+                          : 'border-dark/15 bg-transparent text-dark hover:border-dark/35'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  )
+                },
+              )}
+            </div>
+          </Reveal>
+        </div>
+      </nav>
 
-      {/* ── The grid ───────────────────────────────────────────── */}
-      {stream.length > 0 && (
-        <section className="px-5 pt-[72px] md:px-10 lg:px-[62px]">
-          <div className="mx-auto max-w-[1180px]">
+      {/* ── The grid ──────────────────────────────────────────────
+          One uniform run, published then scheduled. No lead slot,
+          no dividers, nothing drawn around a card. */}
+      <section className="pb-[24px]">
+        <div className={SHELL}>
+          {empty ? (
             <Reveal>
-              <h2 className="font-grotesk text-[12px] font-medium uppercase tracking-[0.12em] text-muted">
-                All posts
-              </h2>
+              <p className="py-[72px] text-center font-sans text-[16px] text-muted">
+                Nothing in this track yet. The first one is on the calendar.
+              </p>
             </Reveal>
-            <Reveal delay={60}>
-              <div className={`mt-[24px] grid gap-x-[28px] gap-y-[48px] md:grid-cols-2 ${columns}`}>
-                {stream.map((item) =>
-                  item.kind === 'post' ? (
-                    <BlogPostCard key={item.key} post={item.post} />
-                  ) : (
-                    <ResourceCard key={item.key} resource={item.resource} />
-                  ),
-                )}
+          ) : (
+            <Reveal>
+              <div className="grid gap-x-[30px] gap-y-[56px] sm:grid-cols-2 lg:grid-cols-3">
+                {published.map((post, i) => (
+                  <PublishedCard key={post.slug} post={post} eager={i < 3} />
+                ))}
+                {upcoming.map((post) => (
+                  <ScheduledCard key={post.slug} post={post} />
+                ))}
               </div>
             </Reveal>
-          </div>
-        </section>
-      )}
-
-      {/* ── Close ──────────────────────────────────────────────── */}
-      <section className="mt-[96px] bg-dark px-5 py-[80px] md:px-10 lg:px-[62px]">
-        <div className="mx-auto flex max-w-[1180px] flex-col items-start gap-[28px] lg:flex-row lg:items-center lg:justify-between">
-          <h2 className="max-w-[620px] font-serif text-[30px] leading-[1.14] text-cream-light md:text-[38px]">
-            See Cooper run on your own submissions
-          </h2>
-          <Link
-            to="/demo"
-            className="inline-flex shrink-0 items-center gap-[10px] rounded-full bg-accent-orange px-[28px] py-[14px] font-grotesk text-[15px] font-medium text-cream-light transition-colors hover:bg-accent-orange-deep"
-          >
-            Request a Demo
-            <ArrowRight size={16} weight="regular" />
-          </Link>
+          )}
         </div>
       </section>
+
+      {/* ── Close ─────────────────────────────────────────────── */}
+      <Reveal>
+        <section className="bg-cream-light">
+          <div className="mx-auto max-w-[1440px] px-5 py-[64px] md:px-10 lg:px-[62px]">
+            <div className="relative h-auto overflow-hidden rounded-[30px] lg:h-[420px]">
+              <img
+                src="/images/about/careers-cta-bg.png"
+                alt=""
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="relative z-10 flex h-full flex-col items-start gap-8 px-5 py-12 md:px-10 lg:flex-row lg:items-center lg:gap-0 lg:px-[72px] lg:py-0">
+                <div className="flex-1">
+                  <span className="mb-[16px] block font-grotesk text-[11px] font-medium uppercase tracking-[1.4px] text-cream-light">
+                    Get started
+                  </span>
+                  <h2 className="mb-[36px] font-serif text-[36px] leading-[1.15] text-white md:text-[34px] lg:text-[42px]">
+                    See Cooper run on your own submissions
+                  </h2>
+                  <Link
+                    to="/demo"
+                    className="inline-block w-fit rounded-[6px] bg-white px-[28px] py-[12px] font-sans text-[15px] font-medium text-dark no-underline transition-all duration-200 hover:scale-[1.03] hover:bg-cream"
+                  >
+                    Request a Demo
+                  </Link>
+                </div>
+                <div className="flex w-full flex-1 lg:justify-end">
+                  <p className="max-w-full font-sans text-[15px] leading-[24.75px] text-white/80 lg:max-w-[380px]">
+                    Bring a real submission. We'll run it end to end and show you where the hours
+                    go.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </Reveal>
 
       <Footer />
     </div>
   )
 }
 
-/** A resource sitting in the post grid. Flat fill and an icon rather than a
-    photograph, so it reads as furniture and never as a post missing its art. */
-function ResourceCard({ resource }: { resource: (typeof RESOURCES)[number] }) {
-  const Icon = resource.icon
-
+/** The quiet category label under every picture. Neutral, not accented: on a
+    page this bare an orange chip on every card becomes the loudest thing. */
+function Chip({ children, muted = false }: { children: React.ReactNode; muted?: boolean }) {
   return (
-    <article className="group h-full">
-      <Link to={resource.to} className="flex h-full flex-col">
-        <div className="flex aspect-[16/9] w-full items-center justify-center rounded-[12px] border border-dark/10 bg-cream">
-          <Icon size={40} weight="thin" className="text-accent-orange" />
-        </div>
+    <span
+      className={`inline-block rounded-[5px] px-[8px] py-[4px] font-grotesk text-[10.5px] font-medium uppercase tracking-[0.1em] ${
+        muted ? 'bg-dark/[0.05] text-muted/70' : 'bg-dark/[0.06] text-muted'
+      }`}
+    >
+      {children}
+    </span>
+  )
+}
 
+/** A published post: picture, chip, title. Nothing else on the card. */
+function PublishedCard({ post, eager = false }: { post: BlogPost; eager?: boolean }) {
+  return (
+    <article className="group">
+      <Link to={`/resources/blog/${post.slug}`} className="block">
+        <PostTile post={post} eager={eager} ratio={CROP} />
+        {/* The chip needs its own block. Both it and the heading are
+            inline-block, so a short title sits up beside the chip instead of
+            under it. Long titles wrap and hide it, which is why it only shows
+            on the shortest card. */}
         <div className="pt-[16px]">
-          <p className="font-grotesk text-[11px] font-medium uppercase tracking-[0.12em] text-muted">
-            From Cooper
-          </p>
-          <h3 className="pt-[8px] font-serif text-[22px] leading-[1.18] text-dark group-hover:text-accent-orange md:text-[24px]">
-            {resource.title}
-          </h3>
-          <p className="pt-[8px] font-sans text-[15px] leading-[1.5] text-muted">{resource.desc}</p>
+          <div>
+            <Chip>{trackById(post.track).label}</Chip>
+          </div>
+          <h2 className="relative inline-block pt-[12px] font-serif text-[22px] leading-[1.24] text-dark md:text-[23px]">
+            {post.title}
+            <span className="absolute -bottom-[2px] left-0 right-0 border-b border-dashed border-dark/30 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+          </h2>
         </div>
       </Link>
     </article>
   )
 }
+
+/**
+ * A scheduled post.
+ *
+ * Not an anchor, and given nothing that would promise a destination: no hover,
+ * no underline, no cursor, no href. The picture is desaturated and dimmed so
+ * every track lands on the same neutral rather than four faded colours, and the
+ * date says when it arrives.
+ */
+function ScheduledCard({ post }: { post: BlogPost }) {
+  return (
+    <article aria-label={`Scheduled: ${post.title}`}>
+      <div className="opacity-40 grayscale">
+        <PostTile post={post} ratio={CROP} />
+      </div>
+      <div className="pt-[16px]">
+        <span className="flex flex-wrap items-center gap-[8px]">
+          <Chip muted>{trackById(post.track).label}</Chip>
+          <span className="font-grotesk text-[10.5px] font-medium uppercase tracking-[0.1em] text-accent-orange">
+            Coming {formatShortDate(post.publishedAt)}
+          </span>
+        </span>
+        {/* /65, not /50. At 22px this is not "large text" under WCAG, so it
+            needs the full 4.5:1 and the lighter tint did not reach it. The
+            greyed picture already carries the "not yet" without the title
+            having to be hard to read. */}
+        <h2 className="pt-[12px] font-serif text-[22px] leading-[1.24] text-dark/65 md:text-[23px]">
+          {post.title}
+        </h2>
+      </div>
+    </article>
+  )
+}
+

@@ -50,6 +50,11 @@ const routes = [
   { path: '/resources/white-paper', title: 'AI for Insurance Agents: How to Evaluate Tools — Cooper', description: 'Why the moment to adopt AI is now, and how to evaluate the tools that actually finish the job, from intake to renewal. A Cooper white paper for insurance agents and brokers.', ogImage: DEFAULT_OG },
   { path: '/demo', title: 'Request a Demo — Cooper', description: 'See Cooper in action with your own data. Book a personalized demo for your insurance team.', ogImage: DEFAULT_OG },
   { path: '/careers', title: 'Careers — Cooper', description: 'Join the team building AI for insurance professionals. See open roles at Cooper.', ogImage: DEFAULT_OG },
+  // Blog version B: a design comparison against /resources/blog, reachable by
+  // link only. noindex keeps it out of the index and out of the sitemap, so the
+  // two versions never compete for the same query. Delete this line, the route
+  // in App.tsx and the component once a version is chosen.
+  { path: '/resources/blog-b', title: 'Blog (version B) — Cooper', description: 'Design comparison against the main blog index.', ogImage: DEFAULT_OG, noindex: true },
   // Legal / policy pages: prerender them so scrapers see the right meta, but
   // mark them noindex and keep them out of the sitemap — they can't rank for
   // anything meaningful and only bleed crawl budget from the pages that can.
