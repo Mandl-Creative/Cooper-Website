@@ -22,6 +22,9 @@ const AboutPage = lazy(() => import('./components/AboutPage'))
 const IntegrationsPage = lazy(() => import('./components/IntegrationsPage'))
 const RoiCalculatorPage = lazy(() => import('./components/RoiCalculatorPage'))
 const WhitePaperPage = lazy(() => import('./components/WhitePaperPage'))
+const BlogIndexPage = lazy(() => import('./components/BlogIndexPage'))
+const BlogIndexPageB = lazy(() => import('./components/BlogIndexPageB'))
+const BlogPostPage = lazy(() => import('./components/BlogPostPage'))
 const CareersPage = lazy(() => import('./components/CareersPage'))
 const CareerRolePage = lazy(() => import('./components/CareerRolePage'))
 const PrivacyPage = lazy(() => import('./components/PrivacyPage'))
@@ -150,6 +153,14 @@ export default function App() {
           <Route path="/integrations" element={<IntegrationsPage />} />
           <Route path="/resources/roi-calculator" element={<RoiCalculatorPage />} />
           <Route path="/resources/white-paper" element={<WhitePaperPage />} />
+          {/* Index above the :slug route, matching the /product/* convention below.
+              blog-b is a design comparison, not a second blog: it reads the same
+              posts and links at the same /resources/blog/:slug pages. It is
+              noindex in the prerender and absent from the sitemap and the nav,
+              and it comes out once a version is picked. */}
+          <Route path="/resources/blog" element={<BlogIndexPage />} />
+          <Route path="/resources/blog-b" element={<BlogIndexPageB />} />
+          <Route path="/resources/blog/:slug" element={<BlogPostPage />} />
           <Route path="/careers" element={<CareersPage />} />
           <Route path="/careers/:roleId" element={<CareerRolePage />} />
           {/* Product / use-case pages (formerly /personas/*). Reinsurers is pulled
