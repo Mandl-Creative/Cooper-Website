@@ -237,6 +237,24 @@
   animation: fade-in 1s ease-out both;
 }
 
+/* The two entrances above run for a second, which is the right length for
+   content arriving as the page is scrolled and the wrong length for a panel
+   answering a click. This one is sized to a keystroke. */
+@keyframes swap-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-swap-in {
+  animation: swap-in 260ms ease-out both;
+}
+
 @keyframes headline-accent {
   0% {
     color: #0a0a0a;

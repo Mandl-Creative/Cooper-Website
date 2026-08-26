@@ -282,3 +282,14 @@ export const personas: Persona[] = [
 export function getPersonaBySlug(slug: string): Persona | undefined {
   return personas.find((p) => p.slug === slug)
 }
+
+/**
+ * Every real customer quote the site holds, pooled into one list.
+ *
+ * They are stored per persona because that is where they were collected, and
+ * only retail-agencies carries any today. Pooling them here keeps that an
+ * implementation detail: a quote added to any persona shows up everywhere the
+ * slider runs, and the persona pages and Cooper Lite cannot drift apart into
+ * two hand-maintained copies of the same five sentences.
+ */
+export const allTestimonials: TestimonialItem[] = personas.flatMap((p) => p.testimonials)
