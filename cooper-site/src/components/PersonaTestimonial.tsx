@@ -1,8 +1,17 @@
 /* ──────────────────────────────────────────────────────────────
-   PersonaTestimonial — Harvey-style editorial quote slider, reusable
-   across every persona page. Narrow meta column (author / role) on
-   the left, a large serif pull-quote on the right, and a segmented
-   progress bar that auto-advances. Pulls per-page testimonials via props.
+   PersonaTestimonial — Harvey-style editorial quote slider. Narrow
+   meta column (author / role) on the left, a large serif pull-quote
+   on the right, and a segmented progress bar that auto-advances.
+   Takes its testimonials via props.
+
+   Named for the persona pages it was built for; Cooper Lite runs it
+   too, which is why the section shell is overridable. The two class
+   props exist because the two pages sit on different surfaces and
+   different gutters: Lite uses 24/40/62 where the persona pages use
+   20/40/60, and a 4px step between one section and the next is the
+   kind of thing that reads as sloppy on a phone. Everything the
+   component is actually for, the timing, the reduced-motion opt-out
+   and the progress bar, stays identical for both.
 ─────────────────────────────────────────────────────────────── */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import type { TestimonialItem } from '../data/personas'
@@ -22,7 +31,17 @@ function usePrefersReducedMotion() {
   return reduce
 }
 
-export default function PersonaTestimonial({ testimonials }: { testimonials: TestimonialItem[] }) {
+export default function PersonaTestimonial({
+  testimonials,
+  sectionClassName = 'bg-cream-light py-[120px]',
+  containerClassName = 'mx-auto max-w-[1440px] px-5 md:px-10 lg:px-[60px]',
+}: {
+  testimonials: TestimonialItem[]
+  /** Surface and vertical rhythm. Defaults to the persona pages'. */
+  sectionClassName?: string
+  /** Measure and gutters. Defaults to the persona pages'. */
+  containerClassName?: string
+}) {
   const reduce = usePrefersReducedMotion()
   const [active, setActive] = useState(0)
   const [animKey, setAnimKey] = useState(0)
@@ -74,8 +93,8 @@ export default function PersonaTestimonial({ testimonials }: { testimonials: Tes
   const clean = t.quote.replace(/^[“"]|[”"]$/g, '').trim()
 
   return (
-    <section className="bg-cream-light py-[120px]">
-      <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-[60px]">
+    <section className={sectionClassName}>
+      <div className={containerClassName}>
         <div className="grid grid-cols-1 items-start gap-[40px] lg:grid-cols-[260px_1fr] lg:gap-[80px]">
           {/* Fixed label — never changes */}
           <div className="lg:pt-[8px]">
