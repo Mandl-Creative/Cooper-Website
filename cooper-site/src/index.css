@@ -103,6 +103,13 @@
      decorative bars/tints keep --color-accent-orange. */
   --color-accent-orange-deep: #c24a08;
   --color-accent-red: #ff472f;
+
+  /* Cooper Lite surfaces. The self-serve tier reads as a calmer, cooler-neutral
+     shade of the brand than the warm cream the enterprise pages use, so it sits
+     next to Cooper without becoming a second palette. */
+  --color-lite-canvas: #f3f3eb;
+  --color-lite-surface: #efefe3;
+  --color-lite-line: #d4d4c9;
 }
 
 @keyframes marquee-left {
