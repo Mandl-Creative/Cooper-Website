@@ -21,74 +21,82 @@
 
 export const WHITE_PAPER_BODY = `## Executive summary
 
-Independent agents and brokers win business on relationships, advice, and speed. Yet most agency hours are still spent on none of those things. They go to re-keying data from dec pages and loss runs, filling the same ACORD forms and carrier supplements again and again, logging into a dozen carrier portals per risk, and reformatting mismatched quotes into a client-ready proposal. The work is essential. Doing it by hand is not.
+Independent agents and brokers win business on relationships, advice, and speed. However, most agency hours go to re-entering data from dec pages and loss runs, filling the same ACORD forms and carrier supplements again and again, logging into a dozen carrier portals and raters per risk, and reformatting mismatched quotes into a client-ready proposal. The work is essential, but doing it by hand is a choice.
 
-A new generation of AI tools built specifically for insurance now handles this work end to end. This paper makes the case for why agencies should be evaluating these tools today, lays out a practical seven-point framework for choosing among them, and explains where Cooper, an AI platform that completes the entire insurance workflow from intake to renewal, fits in that landscape.
+AI tools built specifically for insurance now handle this work end to end. This paper makes the case for why agencies should immediately adopt these tools, lays out a practical seven-point framework for choosing among them, and explains where Cooper, an AI platform that completes the entire insurance workflow from intake to renewal, fits in that landscape.
 
-## Why insurance agents should be looking at AI now
+## Why insurance needs to look at AI now
+
+### Speed decides who wins the account
+
+The first agent back with a competitive quote frequently wins the account, so cycle time affects revenue directly. Clients now hold the whole relationship to that standard: in a survey of more than 600 policyholders, 83% expected a response within one business day and more than a third expected one within the hour, while only 21% said they received proactive outreach from their agent at all. Every day a submission sits in a queue is a day the client is shopping.
+
+AI compresses that cycle from both ends: intake documents become structured data in minutes rather than days, and one risk can be marketed across every appointed carrier in parallel instead of portal by portal. Cooper customers reach first quote 4x faster.
 
 ### The industry has crossed the adoption threshold
 
-AI in insurance is no longer experimental. In a Deloitte survey of 200 US insurance executives, 76% said their organization had already implemented generative AI in one or more business functions; among the property and casualty respondents specifically, 70% said the same. BCG ranks insurance among the leading industries in generative AI adoption. Carriers are already using AI to triage submissions and process claims, which means the counterparties agents deal with every day increasingly expect clean, fast, structured data on the other side of the transaction.
+AI in the independent agency channel is no longer experimental, but it is nowhere near finished. The Big "I" Agents Council for Technology found in February 2026 that 68% of agencies plan to increase their AI use over the next twelve months, while only about 8% have it embedded in daily workflows and 31% use no AI tools at all. Operational efficiency (60%) and staff productivity (52%) were the reasons agencies gave.
 
-At the same time, the gap between experimenting and scaling is where the opportunity sits. BCG found that only 7% of insurance companies have successfully brought their AI systems to scale, with about two-thirds still in the piloting stage. On the distribution side, Vertafore's survey of more than 1,300 independent agency professionals heading into 2026 found 23% confident AI will transform everyday work and another 39% actively exploring use cases, with the remaining 38% either waiting for proven results or unconvinced it is more than hype.
+Readiness is the sharper number. Vertafore's survey of more than 1,300 independent agency professionals heading into 2026 found 46% saying their agency was only somewhat prepared, or not prepared at all, to keep pace with technology and market change. Among agencies with six or fewer staff, that rose to 55%.
 
-The sharpest version of this gap comes from the independent agency channel itself. The Big "I" Agents Council for Technology found that 68% of independent agents plan to increase their AI use over the next twelve months, while just over 8% use AI regularly and strategically today. Agencies that operationalize AI now aren't late. They're ahead of the large majority of their competitors, with time to compound the advantage.
+The carrier side of the transaction is moving too. In a Deloitte survey of 200 US insurance executives fielded in mid-2024, 76% said their organization had already implemented generative AI in one or more business functions, and 70% of the property and casualty respondents said the same. Carriers are using AI to triage submissions and process claims, which means the counterparties agents deal with every day increasingly expect clean, fast, structured data on the other side of the transaction. An agency that puts AI to work now is ahead of most of its competitors, where time will aggressively compound their advantage.
 
-### The math of the talent shortage
+### The shortage is in specialized talent
 
-Agencies face a well-documented staffing squeeze. Experienced CSRs and account managers are retiring faster than they can be replaced, and every open seat pushes more administrative load onto producers. The Big "I" technology survey names the same pressures driving agency AI interest: margin pressure, staffing challenges, rising E&O and cyber exposure, and growing operational complexity. When hiring is hard, the highest-leverage move is to remove the work that doesn't need a person (data entry, form population, portal navigation, quote normalization) so the people you have spend their time advising clients and writing business. In Vertafore's survey, almost two-thirds of respondents were optimistic about how AI can support their work, particularly for data management, reporting, and back-office efficiency, which is exactly this territory.
+The constraint is not headcount in general. The Jacobson Group and Aon's Q1 2026 labor market study, now in its seventeenth year, found 93% of insurers planning to increase or maintain staff over the next twelve months, with the share planning to hold steady at a fifteen-year high and turnover continuing to fall. Agencies are not emptying out.
 
-### Speed is now a competitive weapon
+What is scarce is the specialist. The person who can read a loss run and know which prior claim will worry an underwriter, who knows which supplemental a given carrier wants for a given class code, who spots a silent coverage downgrade buried in a quote that otherwise looks cheaper. That judgment is built over years on the desk, and it is exactly what retires with an experienced CSR or account manager. Aon and Jacobson report the same pattern: hiring is stable overall, and filling specialized roles remains hard.
 
-In a market where the first agent back with a competitive quote frequently wins the account, cycle time is revenue. Every day a submission sits in a queue is a day the client is shopping. AI compresses that cycle from both ends: intake documents become structured data in minutes rather than days, and one risk can be marketed across every appointed carrier in parallel instead of portal by portal. Cooper customers, for example, reach first quote 4x faster, a difference clients can feel.
+That nuance is the whole argument for where AI belongs. The work that requires it (coverage judgment, carrier negotiation, the client conversation) is the work you cannot hire your way out of quickly. The work that does not (data entry, form population, portal and rater navigation, quote normalization) is most of the week. Removing the second so your specialists spend their time on the first is the only lever that scales without a hire, and it is why a tool without insurance-specific depth misses the point: a system that cannot tell a downgrade from a formatting difference just hands the same judgment back to the person who was already short on time.
 
-## What AI can take off an agent's plate
+## What AI can do for Insurance Agents
 
-The practical question is not "Is AI impressive?" but "Which hours of my team's week does it give back?" Mapped against the standard commercial workflow, mature AI platforms now cover:
+The practical question is which hours of your team's week a tool gives back. Mapped against the standard commercial workflow, mature AI platforms now cover:
 
 - **Intake and submission prep.** Reading dec pages, loss runs, applications, and schedules; extracting exposures and prior losses; and populating ACORD forms and carrier supplements automatically.
 - **Marketing the risk.** Driving live carrier portals, not just generating PDFs, and submitting one risk across every market in parallel, eliminating the most repetitive data entry in the agency.
 - **Quote comparison and proposals.** Normalizing mismatched carrier quotes into one clean comparison, flagging coverage differences and silent downgrades, and generating client-ready proposals in the agency's own templates.
-- **Renewals and servicing.** Monitoring the book so renewals never slip, pre-filling renewal applications from current-term data, and handling servicing paperwork that otherwise interrupts producers.
+- **Renewals and servicing.** Monitoring the book so renewals never slip, pre-filling renewal applications from current-term data, and handling servicing paperwork that otherwise interrupts producers. Liberty Mutual's 2026 study of 1,149 agency principals and staff found retention ranked ahead of every other priority, including new business, with the average agency holding 84% of its book.
 
-Note what this list is: the whole workflow, not a feature. That distinction drives the single most important evaluation criterion below.
+Note: this list represents days of a team's busy work that AI can condense into minutes, and it drives the evaluation criteria below.
 
 ## How to evaluate an AI tool for your agency: 7 criteria
 
 ### 1. End-to-end workflow coverage
 
-Ask the defining question first: when the tool finishes, is the job done? A point solution that only extracts data from documents still leaves your team to fill forms, work portals, and build proposals. The bottleneck just moves. Map any tool you evaluate against the complete chain: intake, ACORD and supplemental forms, carrier portal submission, quote comparison, proposal, renewal. A submission that enters the system should leave it as a client-ready deliverable. Fewer hand-offs also means fewer places for errors and E&O exposure to creep in.
+Ask first: when the tool finishes, is the job done? A point solution that only extracts data from documents still leaves your team to fill forms, work portals and raters, and build proposals, so the bottleneck moves rather than clears. Map any tool you evaluate against the complete chain: intake, ACORD and supplemental forms, carrier portal submission, quote comparison, proposal, renewal. A submission that enters the system should leave it as a client-ready deliverable. Fewer hand-offs also means fewer places for errors and E&O exposure.
 
 ### 2. Measured accuracy, not demo accuracy
 
-Every vendor demos well on clean documents. Ask for accuracy figures on real-world inputs: scanned loss runs, handwritten supplements, inconsistent dec pages. Ask how accuracy is measured and monitored in production. Insist on three things from any vendor: a number, the method behind it, and the ability to verify it on your own book during a pilot. A vendor that will not put an accuracy figure in writing is telling you something.
+Every vendor demos well on clean documents. Ask for accuracy figures on real-world inputs: scanned loss runs, handwritten supplements, inconsistent dec pages. Ask how accuracy is measured and monitored in production. Insist on three things from any vendor: a number, the method behind it, and the ability to verify it on your own book during a pilot.
 
-### 3. Real execution in carrier portals
+### 3. Real execution in carrier portals and raters
 
-Much of an agency's manual labor lives inside carrier portals, so a tool that stops at generating a filled PDF leaves the hardest mile untraveled. Verify the platform can actually operate the portals your carriers use, including logging in, navigating, entering data, and submitting, and ask how it handles portal changes over time.
+Much of an agency's manual labor lives inside carrier portals and raters, so a tool that stops at generating a filled PDF leaves the hardest part of the job undone. Verify the platform can actually operate the portals and raters you submit through, including logging in, navigating, entering data, and submitting, and ask how it handles portal changes over time.
 
 ### 4. Security, compliance, and data use
 
-You are handling clients' financial, health, and loss information. Minimum bar: SOC 2 Type II certification, HIPAA compliance where relevant, and a contractual commitment that your data is never used to train the vendor's models. Ask also about data retention, access controls, and audit logging, and ask to see the SOC 2 report rather than the badge.
+You are handling clients' financial, health, and loss information. Minimum bar: SOC 2 Type II certification, HIPAA compliance where relevant, and a contractual commitment that your data is never used to train the vendor's models. Ask also about data retention, access controls, and audit logging, and ask for the SOC 2 report itself.
 
-### 5. Fit with the systems you already run
+### 5. Integrates with your existing systems
 
-The tool should meet your workflow where it lives (your AMS, your document sources, your proposal templates) rather than forcing a rip-and-replace. Output that lands in your own agency templates gets used. Output that requires reformatting gets abandoned.
+The tool should meet your workflow where it lives (your AMS, your document sources, your proposal templates) rather than forcing a rip-and-replace. Output that arrives in your own templates gets used, and output that needs reformatting first usually does not.
 
 ### 6. Human oversight where it matters
 
-The goal is a reliable AI coworker, not an unsupervised one. Look for clear review points: the ability to see what was extracted, correct it, and approve before anything reaches a carrier or a client, and for the system to learn from those corrections. Producers stay accountable for the advice. The AI does the assembly.
+The goal is a reliable AI coworker with clear review points: the ability to see what was extracted, correct it, and approve before anything reaches a carrier or an insured, and for the system to learn from those corrections. The AI does the assembly work, and your producers stay accountable for the advice.
 
 ### 7. Insurance-specific depth
 
-Generic AI assistants can draft an email. They cannot tell a silent coverage downgrade from a formatting difference, or know which supplemental a carrier requires for a given class code. Prefer vendors whose entire product and roadmap is insurance. The tell is in the feature list: bordereaux compilation, underwriting guideline checks, and claims intake are things only an insurance-native team builds.
+Generic AI assistants can draft an email, but they cannot tell a silent coverage downgrade from a formatting difference, or know which supplemental a carrier requires for a given class code. Prefer vendors whose entire product and roadmap is insurance. The feature list shows it: ACORD form submission, underwriting guideline checks, and claims intake are built only by insurance-native teams.
 
 ## Where Cooper fits
 
-Cooper is an AI coworker for the entire insurance workflow, from intake to renewal. Send it the documents you already receive, including dec pages, loss runs, and applications, and it pulls exposures and prior losses into the right fields, fills the ACORD forms and carrier supplements automatically, submits the risk across every market in parallel by driving live carrier portals, normalizes the quotes that come back into one clean comparison with coverage differences and silent downgrades flagged, and produces a proposal in your agency's template. Renewals are monitored so none slip.
+Cooper is an AI coworker for the entire insurance workflow, from intake to renewal. Send it the documents you already receive: dec pages, loss runs, applications.
 
-The results Cooper reports: 99.2% form-fill accuracy, 4x faster time to first quote, and more than $65M in premiums processed, with SOC 2 Type II certification, HIPAA compliance, and no model training on customer data. Measured against the seven criteria above, the through-line is completeness. Cooper is designed so the workflow finishes, not so one step gets faster.
+From there it works the submission the way your team would. It pulls exposures and prior losses into the right fields, then fills the ACORD forms and carrier supplements automatically. It markets the risk across every carrier in parallel by driving live portals and raters. It normalizes the quotes that come back into one comparison, with coverage differences and silent downgrades flagged. It produces the proposal in your agency's template. Renewals are monitored so none slip.
+
+The results Cooper reports: 99.2% form-fill accuracy, 4x faster time to first quote, and more than $180M in premiums processed, with SOC 2 Type II certification, HIPAA compliance, and no model training on customer data. Against the seven criteria above, Cooper is built to finish the workflow rather than to speed up one step of it.
 
 ## Getting started: a low-risk path
 
@@ -97,35 +105,45 @@ The results Cooper reports: 99.2% form-fill accuracy, 4x faster time to first qu
 - **Keep humans in the loop** with a named owner reviewing outputs during the pilot, then widen autonomy as trust is earned.
 - **Expand by workflow, not by tool.** Because an end-to-end platform covers adjacent steps natively, growth means turning on renewals or proposals, not procuring and stitching another vendor.
 
-None of this requires a leap of faith. The technology is in production today, the evaluation criteria above are knowable, and the result is checkable against the same three numbers you baselined at the start: hours per submission, days to first quote, touches per renewal. Run the pilot, measure it against those, and decide from there.
+The technology is in production today, and the result is checkable against the same three numbers you baselined at the start: hours per submission, days to first quote, touches per renewal. Run the pilot, measure it, and decide from there.
 
 ## Frequently asked questions
 
 ### What can AI actually do for an insurance agency today?
 
-Production-ready AI platforms read intake documents (dec pages, loss runs, applications), fill ACORD forms and carrier supplements, submit risks through live carrier portals in parallel, normalize quotes into side-by-side comparisons, generate client proposals, and monitor renewals. The best tools, like Cooper, cover this entire chain rather than a single step.
+Production-ready AI platforms read intake documents (dec pages, loss runs, applications), fill ACORD forms and carrier supplements, submit risks through live carrier portals and raters in parallel, normalize quotes into side-by-side comparisons, generate client proposals, and monitor renewals. The best tools, like Cooper, cover this entire chain rather than a single step.
 
 ### Will AI replace insurance agents?
 
-No. The tools replacing keystrokes are not replacing judgment. Coverage advice, carrier relationships, negotiation, and client trust remain human work. AI removes the administrative load around them, which is why it lands hardest as a response to the industry's staffing shortage rather than as a substitute for producers.
+No. Coverage advice, carrier relationships, negotiation, and client trust remain human work, and that specialist judgment is the hardest thing in the industry to hire for. AI removes the busywork around it so the specialists you already have spend their time there, which is why it reads as leverage on scarce expertise rather than as a substitute for producers.
 
 ### What should an agency look for when evaluating AI tools?
 
-Seven things: end-to-end workflow coverage, measured real-world accuracy, the ability to execute inside carrier portals (not just fill PDFs), security and data-use commitments (SOC 2 Type II, HIPAA, no training on your data), fit with your existing AMS and templates, human review points, and insurance-specific depth.
+Seven things:
+
+- **End-to-end workflow coverage**, so the job is finished rather than moved.
+- **Measured real-world accuracy**, on your documents, not the demo set.
+- **Execution inside carrier portals and raters**, not just filled PDFs.
+- **Security and data-use commitments**: SOC 2 Type II, HIPAA, no training on your data.
+- **Integration with your existing AMS and templates.**
+- **Human review points** before anything reaches a carrier or an insured.
+- **Insurance-specific depth**, built by a team that only does insurance.
 
 ### How is Cooper different from other insurance AI tools?
 
-Cooper completes the end-to-end workflow, from intake to renewal, rather than automating one step. It fills forms with 99.2% accuracy, drives live carrier portals to market a risk across every carrier in parallel, flags coverage differences and silent downgrades across quotes, delivers proposals in your agency's templates, and reaches first quote 4x faster.
+Cooper completes the end-to-end workflow, from intake to renewal, rather than automating one step. It fills forms with **99.2% form-fill accuracy**, drives live carrier portals and raters to market a risk across every carrier in parallel, flags coverage differences and silent downgrades across quotes, delivers proposals in your agency's templates, and reaches first quote **4x faster**. It has processed **more than $180M in premiums** to date.
 
 ### Is client data safe with an AI platform like Cooper?
 
-Look for independent attestation rather than assurances. Cooper is SOC 2 Type II certified, HIPAA compliant, and contractually commits to no model training on customer data. Those are the three commitments any agency should require of any AI vendor.
+Look for independent attestation. Cooper is SOC 2 Type II certified, HIPAA compliant, and contractually commits to no model training on customer data. Those are the three commitments any agency should require of any AI vendor.
 
 ## Sources
 
-1. Deloitte Center for Financial Services, "Are insurers truly ready to scale gen AI?", April 4, 2025. Survey of 200 US insurance executives (100 life and annuity, 100 property and casualty), fielded June 2024. 76% overall, 70% among P&C respondents. https://www.deloitte.com/us/en/insights/industry/financial-services/scaling-gen-ai-insurance.html
-2. Boston Consulting Group, "Insurance Leads in AI Adoption. Now It's Time to Scale.", September 4, 2025. The 7% figure draws on BCG's Build for the Future 2024 Global Study. https://www.bcg.com/publications/2025/insurance-leads-ai-adoption-now-time-to-scale
-3. Vertafore, "2026 Agency Trends Outlook," February 6, 2026. Survey of 1,300+ US independent agency professionals. Sentiment split: 23% confident, 39% exploring, 29% cautious, 9% skeptical. https://www.vertafore.com/resources/ebooks-whitepapers/2026-agency-trends-outlook
-4. Big "I" Agents Council for Technology, "2026 TECH Trends Report." https://www.independentagent.com/technology-trends-report/
-5. Cooper product and performance claims: askcooper.ai.
+1. Big "I" Agents Council for Technology, "2026 TECH Trends Report," released February 19, 2026. National email survey of independent agency members. 68% plan to increase AI use (38% very likely, 30% somewhat likely); 8% embed AI in daily workflows; 31% use no AI tools; efficiency 60%, staff productivity 52%. https://www.independentagent.com/technology-trends-report/
+2. Vertafore, "2026 Agency Trends Outlook," February 6, 2026. Survey of 1,300+ US independent agency professionals. 46% only somewhat or not at all prepared to keep pace with technology and market change, rising to 55% at agencies with six or fewer staff. https://www.vertafore.com/resources/ebooks-whitepapers/2026-agency-trends-outlook
+3. The Jacobson Group and Aon, "Q1 2026 US Insurance Labor Market Study," seventeenth year. 93% of carriers plan to increase or maintain staff over the next twelve months; the share planning to maintain is at a fifteen-year high; turnover continues to decline while specialized roles remain difficult to fill. https://www.jacobsononline.com/insights/insurance-labor-market-study/
+4. Liberty Mutual, "2026 Independent Agency Growth Study." Survey of 1,149 US independent agency principals and staff, fielded online December 2025. 98% rank retention as very important, ahead of new business; average agency retention 84%. https://www.agentforthefuture.com/topics/all-reports/2026-independent-agency-growth-study/
+5. Vertafore, consumer survey of 600+ policyholders, published 2025. 83% expect a response within one business day, more than a third within an hour; 21% report receiving proactive outreach. https://www.vertafore.com/resources/policyholder-expectations-independent-agents-2026
+6. Deloitte Center for Financial Services, "Are insurers truly ready to scale gen AI?", April 4, 2025. Survey of 200 US insurance executives (100 life and annuity, 100 property and casualty), fielded June 2024. 76% overall, 70% among P&C respondents. https://www.deloitte.com/us/en/insights/industry/financial-services/scaling-gen-ai-insurance.html
+7. Cooper product and performance claims: askcooper.ai.
 `

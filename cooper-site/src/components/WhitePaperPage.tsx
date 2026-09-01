@@ -149,30 +149,34 @@ function writeCache(body: string): void {
 /* ── Markdown body styling (mirrors LegalDocPage, tuned for long-form reading) ── */
 const linkCls =
   'text-accent-orange underline decoration-accent-orange/30 hover:decoration-accent-orange transition-colors break-words'
-const pCls = 'font-sans text-[16px] leading-[1.75] text-dark/70 mb-[18px]'
-const h2Cls = 'font-serif text-[26px] md:text-[30px] leading-[1.2] text-dark mt-[52px] mb-[20px]'
-const h3Cls = 'font-sans font-semibold text-[17px] text-dark mb-[12px] mt-[32px]'
-const listCls = 'font-sans text-[16px] leading-[1.75] text-dark/70 mb-[18px] pl-[22px] space-y-[8px]'
+/* text-pretty on the prose and text-balance on the headings: both stop a line
+   from breaking with a single word stranded on the next one, which this paper
+   was doing repeatedly. The browser does the work, so it keeps holding as the
+   copy is edited rather than needing sentences hand-tuned to a width. */
+const pCls = 'font-sans text-[16px] leading-[1.75] text-dark/70 mb-[18px] text-pretty'
+const h2Cls = 'font-serif text-[26px] md:text-[30px] leading-[1.2] text-dark mt-[52px] mb-[20px] text-balance'
+const h3Cls = 'font-sans font-semibold text-[17px] text-dark mb-[12px] mt-[32px] text-balance'
+const listCls = 'font-sans text-[16px] leading-[1.75] text-dark/70 mb-[18px] pl-[22px] space-y-[8px] text-pretty'
 
 /* ── The exec-summary bullets, kept out of the markdown so they can be
    rendered as a highlighted box at the top (and reused for the SEO
    description / answer engines). Each is a bold lead-in + the rest. ── */
 const TAKEAWAYS: { lead: string; rest: string }[] = [
   {
-    lead: 'AI has moved from chat assistants to doing the work:',
-    rest: ' modern platforms complete submissions, fill ACORD forms and carrier supplements, drive live carrier portals, compare quotes, and build proposals.',
+    lead: 'AI has moved from chat assistants to completing essential work:',
+    rest: ' modern platforms complete submissions, fill ACORD forms and carrier supplements, drive live carrier portals and raters, compare quotes, and build proposals.',
   },
   {
     lead: 'The adoption window favors agencies that move now.',
-    rest: ' 76% of insurance executives say their organization has deployed generative AI somewhere, yet only 7% of insurers have scaled it and just 8% of independent agents use AI regularly and strategically.',
+    rest: ' Adoption is wide but shallow. 68% of agencies plan to increase their AI use this year, yet only 8% have it embedded in daily workflows and 46% say they are not prepared to keep pace with technology.',
   },
   {
     lead: 'Evaluate on seven criteria:',
-    rest: ' end-to-end workflow coverage, measured accuracy, real portal execution, security and data-use policies, fit with your systems, human oversight, and insurance-specific depth.',
+    rest: ' end-to-end workflow coverage, measured accuracy, real portal and rater execution, security and data-use policies, integration with your systems, human oversight, and insurance-specific depth.',
   },
   {
     lead: 'End-to-end beats point solutions.',
-    rest: ' Tools that automate one step just move the bottleneck. Cooper completes the entire workflow, intake to renewal, with 99.2% form-fill accuracy and quotes reaching clients 4x faster.',
+    rest: ' Tools that automate one step leave the rest of the work where it was. Cooper covers the whole chain, intake, ACORD forms and carrier supplements, portal submission, quote comparison, proposals, and renewals, so an agency runs one platform instead of stitching several together.',
   },
 ]
 
@@ -287,30 +291,30 @@ function PaperCover() {
 const FAQ: { q: string; a: string }[] = [
   {
     q: 'What can AI actually do for an insurance agency today?',
-    a: 'Production-ready AI platforms read intake documents (dec pages, loss runs, applications), fill ACORD forms and carrier supplements, submit risks through live carrier portals in parallel, normalize quotes into side-by-side comparisons, generate client proposals, and monitor renewals. The best tools, like Cooper, cover this entire chain rather than a single step.',
+    a: 'Production-ready AI platforms read intake documents (dec pages, loss runs, applications), fill ACORD forms and carrier supplements, submit risks through live carrier portals and raters in parallel, normalize quotes into side-by-side comparisons, generate client proposals, and monitor renewals. The best tools, like Cooper, cover this entire chain rather than a single step.',
   },
   {
     q: 'Will AI replace insurance agents?',
-    a: 'No. The tools replacing keystrokes are not replacing judgment. Coverage advice, carrier relationships, negotiation, and client trust remain human work. AI removes the administrative load around them, which is why it lands hardest as a response to the industry\'s staffing shortage rather than as a substitute for producers.',
+    a: 'No. Coverage advice, carrier relationships, negotiation, and client trust remain human work, and that specialist judgment is the hardest thing in the industry to hire for. AI removes the busywork around it so the specialists you already have spend their time there, which is why it reads as leverage on scarce expertise rather than as a substitute for producers.',
   },
   {
     q: 'What should an agency look for when evaluating AI tools?',
-    a: 'Seven things: end-to-end workflow coverage, measured real-world accuracy, the ability to execute inside carrier portals (not just fill PDFs), security and data-use commitments (SOC 2 Type II, HIPAA, no training on your data), fit with your existing AMS and templates, human review points, and insurance-specific depth.',
+    a: 'Seven things: end-to-end workflow coverage; measured real-world accuracy on your own documents; execution inside carrier portals and raters, not just filled PDFs; security and data-use commitments (SOC 2 Type II, HIPAA, no training on your data); integration with your existing AMS and templates; human review points before anything reaches a carrier or an insured; and insurance-specific depth.',
   },
   {
     q: 'How is Cooper different from other insurance AI tools?',
-    a: 'Cooper completes the end-to-end workflow, from intake to renewal, rather than automating one step. It fills forms with 99.2% accuracy, drives live carrier portals to market a risk across every carrier in parallel, flags coverage differences and silent downgrades across quotes, delivers proposals in your agency\'s templates, and reaches first quote 4x faster.',
+    a: 'Cooper completes the end-to-end workflow, from intake to renewal, rather than automating one step. It fills forms with 99.2% form-fill accuracy, drives live carrier portals and raters to market a risk across every carrier in parallel, flags coverage differences and silent downgrades across quotes, delivers proposals in your agency\'s templates, and reaches first quote 4x faster. It has processed more than $180M in premiums to date.',
   },
   {
     q: 'Is client data safe with an AI platform like Cooper?',
-    a: 'Look for independent attestation rather than assurances. Cooper is SOC 2 Type II certified, HIPAA compliant, and contractually commits to no model training on customer data. Those are the three commitments any agency should require of any AI vendor.',
+    a: 'Look for independent attestation. Cooper is SOC 2 Type II certified, HIPAA compliant, and contractually commits to no model training on customer data. Those are the three commitments any agency should require of any AI vendor.',
   },
 ]
 
 const PAGE_PATH = '/resources/white-paper'
 export const PAGE_TITLE = 'AI for Insurance Agents: How to Evaluate Tools'
 export const PAGE_DESC =
-  'Why the moment to adopt AI is now, and how to evaluate the tools that actually finish the job, from intake to renewal. A Cooper white paper for insurance agents and brokers.'
+  'Why the moment to adopt AI is now, and how to evaluate the tools that actually finish the job. A Cooper white paper for insurance agents and brokers.'
 
 function jsonLd() {
   const url = absoluteUrl(PAGE_PATH)
@@ -712,7 +716,17 @@ export default function WhitePaperPage() {
               }`}
               style={{ animationDelay: '0.08s' }}
             >
-              Why the moment to adopt is now, and how to evaluate tools that actually finish the job, from intake to renewal.
+              Why the moment to adopt is now, and how to evaluate tools that actually finish the job.
+            </p>
+
+            {/* Who the paper is for, stated rather than left to be inferred. */}
+            <p
+              className={`mb-[20px] max-w-[680px] animate-fade-blur-in font-sans text-[13px] italic leading-[1.5] text-pretty ${
+                layout === 'b' ? 'text-cream-light/45' : 'text-dark/45'
+              }`}
+              style={{ animationDelay: '0.09s' }}
+            >
+              Written for commercial P&amp;C agencies and brokerages running submissions from intake to renewal.
             </p>
 
             {/* ── The dateline.

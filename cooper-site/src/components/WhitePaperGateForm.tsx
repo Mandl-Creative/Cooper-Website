@@ -32,7 +32,7 @@ export default function WhitePaperGateForm({ onUnlock }: { onUnlock: (body: stri
       </h2>
       <p className="mt-[9px] font-sans text-[14px] leading-[1.55] text-dark/55">
         We read the surveys, traced every figure back to its primary source, and sat
-        with the agencies doing this work. It opens right here, no download.
+        with the agencies doing this work.
       </p>
 
       <div className="mt-[20px]">

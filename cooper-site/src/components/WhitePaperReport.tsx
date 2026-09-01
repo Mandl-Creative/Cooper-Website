@@ -44,28 +44,30 @@ import {
 const FINDINGS: { icon: Icon; lead: string; rest: string }[] = [
   {
     icon: Lightning,
-    lead: 'AI has moved from chat assistants to doing the work.',
-    rest: ' Modern platforms complete submissions, fill ACORD forms and carrier supplements, drive live carrier portals, compare quotes, and build proposals.',
+    lead: 'AI has moved from chat assistants to completing essential work.',
+    rest: ' Modern platforms complete submissions, fill ACORD forms and carrier supplements, drive live carrier portals and raters, compare quotes, and build proposals.',
   },
   {
     icon: TrendUp,
     lead: 'The adoption window favors agencies that move now.',
-    rest: ' 76% of insurance executives say their organization has deployed generative AI somewhere, yet only 7% of insurers have scaled it and just 8% of independent agents use AI regularly and strategically.',
+    rest: ' Adoption is wide but shallow. 68% of agencies plan to increase their AI use this year, yet only 8% have it embedded in daily workflows and 46% say they are not prepared to keep pace with technology.',
   },
   {
     icon: ListChecks,
     lead: 'Evaluate on seven criteria.',
-    rest: ' End-to-end workflow coverage, measured accuracy, real portal execution, security and data-use policies, fit with your systems, human oversight, and insurance-specific depth.',
+    rest: ' End-to-end workflow coverage, measured accuracy, real portal and rater execution, security and data-use policies, integration with your systems, human oversight, and insurance-specific depth.',
   },
   {
     icon: ArrowsLeftRight,
     lead: 'End-to-end beats point solutions.',
-    rest: ' Tools that automate one step just move the bottleneck. Cooper completes the entire workflow, intake to renewal, with 99.2% form-fill accuracy and quotes reaching clients 4x faster.',
+    rest: ' Tools that automate one step leave the rest of the work where it was. Cooper covers the whole chain, intake, ACORD forms and carrier supplements, portal submission, quote comparison, proposals, and renewals, so an agency runs one platform instead of stitching several together.',
   },
 ]
 
 function SectionTitle({ children }: { children: ReactNode }) {
-  return <h2 className="mb-[16px] font-serif text-[27px] leading-[1.18] text-dark">{children}</h2>
+  return (
+    <h2 className="mb-[16px] font-serif text-[27px] leading-[1.18] text-dark text-balance">{children}</h2>
+  )
 }
 
 /* ── The cover, standing in a lit scene rather than pasted flat on the page.
@@ -134,7 +136,7 @@ export default function WhitePaperReport({
             <FileText size={16} weight="regular" className="text-dark shrink-0" />
             <span className="font-medium text-dark">White Paper</span>
             <span aria-hidden>//</span>
-            <span>July 2026 edition</span>
+            <span>July 2026</span>
           </div>
 
           <h1
@@ -148,7 +150,18 @@ export default function WhitePaperReport({
             style={{ animationDelay: '0.08s' }}
           >
             Why the moment to adopt is now, and how to evaluate tools that actually finish
-            the job, from intake to renewal.
+            the job.
+          </p>
+
+          {/* Who the paper is for, stated rather than left to be inferred: the
+              workflows below are the commercial submission chain, which is a
+              brokerage's week rather than a personal-lines agent's. */}
+          <p
+            className="mt-[12px] max-w-[560px] animate-fade-blur-in font-sans text-[13px] italic leading-[1.5] text-dark/45 text-pretty"
+            style={{ animationDelay: '0.09s' }}
+          >
+            Written for commercial P&amp;C agencies and brokerages running submissions from
+            intake to renewal.
           </p>
 
           {/* The cover, on mobile only: right under the standfirst and at a
@@ -170,7 +183,7 @@ export default function WhitePaperReport({
               <li key={lead} className="flex gap-[16px]">
                 {/* Nudged to sit on the first line rather than above it. */}
                 <Glyph size={19} weight="regular" className="mt-[3px] shrink-0 text-dark" />
-                <p className="font-sans text-[15.5px] leading-[1.55] text-dark/70">
+                <p className="font-sans text-[15.5px] leading-[1.55] text-dark/70 text-pretty">
                   <span className="font-medium text-dark">{lead}</span>
                   {rest}
                 </p>
@@ -179,7 +192,10 @@ export default function WhitePaperReport({
           </ul>
 
           <div className="mt-[52px]">
-            <SectionTitle>Summary</SectionTitle>
+            {/* The heading only while locked: the paper's own "## Executive
+                summary" carries it once unlocked, and rendering both stacked
+                two headings on top of each other. */}
+            {!body && <SectionTitle>Executive summary</SectionTitle>}
             {/* While locked this is the public opening. Once the gate is passed
                 the whole paper renders here instead, so the reader carries on
                 down the page they were already reading rather than being sent

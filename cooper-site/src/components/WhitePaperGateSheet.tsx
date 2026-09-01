@@ -205,13 +205,8 @@ export default function WhitePaperGateSheet({
                   <LockSimple size={13} weight="bold" /> Keep reading
                 </span>
                 <h2 className="mx-auto mt-[10px] max-w-[440px] font-serif text-[25px] leading-[1.14] text-dark sm:mt-[11px] sm:text-[34px]">
-                  Create free access, and finish the paper
+                  The seven criteria, and the rest of the paper
                 </h2>
-                <p className="mx-auto mt-[9px] max-w-[450px] font-sans text-[14px] leading-[1.5] text-dark/55 sm:mt-[10px] sm:text-[14.5px] sm:leading-[1.55]">
-                  Ten more minutes of reading: the seven criteria, every figure traced to its
-                  source, and the low-risk path to getting started. It opens right here, no
-                  download.
-                </p>
 
                 <div className="mt-[18px] sm:mt-[22px]">
                   <GateFields gate={gate} idPrefix="wps" submitLabel="Unlock to Read" columns>
