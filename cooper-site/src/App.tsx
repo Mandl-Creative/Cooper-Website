@@ -23,6 +23,8 @@ const IntegrationsPage = lazy(() => import('./components/IntegrationsPage'))
 const LitePage = lazy(() => import('./components/LitePage'))
 const RoiCalculatorPage = lazy(() => import('./components/RoiCalculatorPage'))
 const WhitePaperPage = lazy(() => import('./components/WhitePaperPage'))
+const BlogIndexPage = lazy(() => import('./components/BlogIndexPage'))
+const BlogPostPage = lazy(() => import('./components/BlogPostPage'))
 const CareersPage = lazy(() => import('./components/CareersPage'))
 const CareerRolePage = lazy(() => import('./components/CareerRolePage'))
 const PrivacyPage = lazy(() => import('./components/PrivacyPage'))
@@ -154,6 +156,9 @@ export default function App() {
           <Route path="/lite" element={<LitePage />} />
           <Route path="/resources/roi-calculator" element={<RoiCalculatorPage />} />
           <Route path="/resources/white-paper" element={<WhitePaperPage />} />
+          {/* Index above the :slug route, matching the /product/* convention below. */}
+          <Route path="/resources/blog" element={<BlogIndexPage />} />
+          <Route path="/resources/blog/:slug" element={<BlogPostPage />} />
           <Route path="/careers" element={<CareersPage />} />
           <Route path="/careers/:roleId" element={<CareerRolePage />} />
           {/* Product / use-case pages (formerly /personas/*). Reinsurers is pulled
