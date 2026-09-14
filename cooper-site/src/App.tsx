@@ -21,6 +21,7 @@ const PersonaPage = lazy(() => import('./components/PersonaPage'))
 const AboutPage = lazy(() => import('./components/AboutPage'))
 const IntegrationsPage = lazy(() => import('./components/IntegrationsPage'))
 const LitePage = lazy(() => import('./components/LitePage'))
+const LiteComparePage = lazy(() => import('./components/lite/LiteComparePage'))
 const RoiCalculatorPage = lazy(() => import('./components/RoiCalculatorPage'))
 const WhitePaperPage = lazy(() => import('./components/WhitePaperPage'))
 const CareersPage = lazy(() => import('./components/CareersPage'))
@@ -149,9 +150,10 @@ export default function App() {
           <Route path="/demo" element={<DemoPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/integrations" element={<IntegrationsPage />} />
-          {/* Cooper Lite: the self-serve tier. Signup and the plan comparison
-              live in the product app, so only the landing page is routed here. */}
+          {/* Cooper Lite: the self-serve tier. Signup still lives in the product
+              app; the landing page and the plan comparison are routed here. */}
           <Route path="/lite" element={<LitePage />} />
+          <Route path="/lite/compare" element={<LiteComparePage />} />
           <Route path="/resources/roi-calculator" element={<RoiCalculatorPage />} />
           <Route path="/resources/white-paper" element={<WhitePaperPage />} />
           <Route path="/careers" element={<CareersPage />} />

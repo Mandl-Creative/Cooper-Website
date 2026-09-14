@@ -30,10 +30,10 @@ import {
 import { useSeo } from '../lib/useSeo'
 import { pageJsonLd } from '../lib/pageSchema'
 
-/* Signup, the plan comparison and the workspace all live in the product app,
-   not in this marketing repo, so these stay absolute. */
+/* Signup and the workspace live in the product app, not in this marketing
+   repo, so those stay absolute. The plan comparison is a route here now. */
 const SIGNUP_URL = 'https://www.askcooper.ai/lite/signup'
-const COMPARE_URL = 'https://www.askcooper.ai/lite/compare'
+const COMPARE_URL = '/lite/compare'
 const LOGIN_URL = 'https://workspace.askcooper.ai/sign-in'
 
 /* ── Cooper Lite lockup ──────────────────────────────────────── */
