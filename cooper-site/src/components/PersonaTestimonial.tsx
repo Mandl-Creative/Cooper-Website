@@ -22,7 +22,20 @@ function usePrefersReducedMotion() {
   return reduce
 }
 
-export default function PersonaTestimonial({ testimonials }: { testimonials: TestimonialItem[] }) {
+/* Both class props replace their element's classes outright rather than being
+   appended, so a caller changing the band colour or the gutters cannot end up
+   with two competing utilities and whichever one Tailwind happens to emit last.
+   The gutters live on the inner container, not the section, so `max-w` applies
+   to the padded content box: override them together or not at all. */
+export default function PersonaTestimonial({
+  testimonials,
+  sectionClassName = 'bg-cream-light py-[120px]',
+  containerClassName = 'mx-auto max-w-[1440px] px-5 md:px-10 lg:px-[60px]',
+}: {
+  testimonials: TestimonialItem[]
+  sectionClassName?: string
+  containerClassName?: string
+}) {
   const reduce = usePrefersReducedMotion()
   const [active, setActive] = useState(0)
   const [animKey, setAnimKey] = useState(0)
@@ -74,8 +87,8 @@ export default function PersonaTestimonial({ testimonials }: { testimonials: Tes
   const clean = t.quote.replace(/^[“"]|[”"]$/g, '').trim()
 
   return (
-    <section className="bg-cream-light py-[120px]">
-      <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-[60px]">
+    <section className={sectionClassName}>
+      <div className={containerClassName}>
         <div className="grid grid-cols-1 items-start gap-[40px] lg:grid-cols-[260px_1fr] lg:gap-[80px]">
           {/* Fixed label — never changes */}
           <div className="lg:pt-[8px]">
@@ -85,7 +98,13 @@ export default function PersonaTestimonial({ testimonials }: { testimonials: Tes
           </div>
 
           {/* Quote + attribution — fades in fresh on each change */}
-          <div key={`quote-${animKey}`} className="animate-fade-in min-h-[200px] lg:min-h-[260px]" style={{ animationDelay: '0.08s' }}>
+          {/* The reserved height stops the section from jumping as slides swap.
+              A lone quote never swaps, so reserving there is just dead space. */}
+          <div
+            key={`quote-${animKey}`}
+            className={`animate-fade-in ${multiple ? 'min-h-[200px] lg:min-h-[260px]' : ''}`}
+            style={{ animationDelay: '0.08s' }}
+          >
             <blockquote className="font-serif text-[36px] leading-[1.2] text-dark sm:text-[38px] lg:text-[40px] lg:leading-[1.24]">
               &ldquo;{clean}&rdquo;
             </blockquote>
