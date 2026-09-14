@@ -102,6 +102,8 @@
      it meets WCAG AA (4.78:1). Use for filled buttons with small text;
      decorative bars/tints keep --color-accent-orange. */
   --color-accent-orange-deep: #c24a08;
+  /* Hover partner for accent-orange-deep. */
+  --color-accent-orange-dark: #9a3706;
   --color-accent-red: #ff472f;
 
   /* Cooper Lite surfaces. The self-serve tier reads as a calmer, cooler-neutral
