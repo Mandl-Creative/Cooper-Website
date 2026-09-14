@@ -97,6 +97,11 @@
   --color-dark: #1e1a15;
   --color-dark-2: #1d1a17;
   --color-muted: #4d4c48;
+  /* Second, quieter step below --color-muted. The palette had a single grey, so
+     any surface needing three text tiers (a heading, a scan layer, and the copy
+     underneath) had to express them with two and could not. 5.83:1 on
+     lite-canvas, so it clears AA with margin rather than sitting on the floor. */
+  --color-muted-2: #5f5e58;
   --color-accent-orange: #d95611;
   /* Button-surface orange: same hue, dark enough that cream-light body text on
      it meets WCAG AA (4.78:1). Use for filled buttons with small text;

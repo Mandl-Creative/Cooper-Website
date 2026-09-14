@@ -27,6 +27,7 @@ import {
   Plus,
   ShieldCheck,
 } from '@phosphor-icons/react'
+import PersonaTestimonial from './PersonaTestimonial'
 import { useSeo } from '../lib/useSeo'
 import { pageJsonLd } from '../lib/pageSchema'
 
@@ -913,75 +914,32 @@ function FitTest() {
 /* ── Testimonial ─────────────────────────────────────────────── */
 
 /**
- * The quote is real; the attribution is not yet. Everything the page can say
- * about this customer today is "a principal at a three-person retail agency",
- * and an unattributed quote is the weakest kind of proof there is: a sceptical
- * reader assumes it was written in-house.
+ * The same editorial quote slider the persona pages use, so Lite reads as part
+ * of the site rather than as its own small product. One quote here, which
+ * means the component drops its progress bar on its own.
  *
- * So the section is built for the attribution we want rather than the one we
- * have. Supply `name` and `portrait` and the layout completes itself; until
- * then the disc carries the brand plate and the name line is simply absent,
- * which is honest. A stock face here would be worse than no face.
+ * The attribution is a role, not a person: everything the page can honestly say
+ * about this customer today is "a principal at a three-person retail agency".
+ * An invented name would be worse than none.
  */
-const QUOTE = {
-  text: 'I’m a three-person shop competing against agencies with twenty. Cooper is the reason I can quote the same account in a morning instead of a week.',
-  name: null as string | null,
-  role: 'Principal · 3-person retail P&C agency',
-  portrait: null as string | null,
-}
+const LITE_TESTIMONIALS = [
+  {
+    quote:
+      'I\u2019m a three-person shop competing against agencies with twenty. Cooper is the reason I can quote the same account in a morning instead of a week.',
+    author: '',
+    role: 'Principal, 3-person retail P&C agency',
+  },
+]
 
 function Testimonial() {
+  /* The shared default band is cream-light, which is also Pricing's, directly
+     below. Cream keeps the two sections from reading as one. */
   return (
-    <section className="bg-cream px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[96px]">
-      <div className="grid grid-cols-1 items-center gap-[40px] lg:grid-cols-[1fr_auto] lg:gap-[64px]">
-        <div>
-          <p className="font-grotesk mb-[10px] text-[11px] uppercase tracking-[.16em] text-accent-orange">
-            From a retail agency
-          </p>
-
-          {/* Set as a mark rather than typed into the quote, so it can carry its
-              own size and colour without the text inheriting either. */}
-          <span
-            aria-hidden
-            className="block h-[46px] font-serif text-[92px] leading-[1] text-accent-orange"
-          >
-            &ldquo;
-          </span>
-
-          <blockquote className="mt-[26px] max-w-[24ch] font-serif text-[clamp(26px,3.2vw,40px)] leading-[1.24] tracking-[-.01em] text-dark-2 sm:max-w-[30ch]">
-            {QUOTE.text}
-          </blockquote>
-
-          <div className="mt-[28px]">
-            {QUOTE.name && (
-              <p className="text-[14px] font-semibold text-dark-2">{QUOTE.name}</p>
-            )}
-            <p className="text-[13.5px] text-muted">{QUOTE.role}</p>
-          </div>
-        </div>
-
-        <div className="relative hidden h-[260px] w-[260px] shrink-0 lg:block">
-          {/* Two flat squares stepping out from under the disc, the quietest
-              way to give the circle something to sit against. */}
-          <span
-            aria-hidden
-            className="absolute bottom-[30px] left-[6px] h-[96px] w-[96px] bg-accent-orange/14"
-          />
-          <span
-            aria-hidden
-            className="absolute bottom-[-4px] left-[70px] h-[58px] w-[58px] bg-accent-orange/22"
-          />
-          <div
-            className="absolute right-0 top-0 h-[220px] w-[220px] overflow-hidden rounded-full bg-lite-surface bg-cover bg-center"
-            style={{
-              backgroundImage: QUOTE.portrait
-                ? `url(${QUOTE.portrait})`
-                : 'url(/images/lite/plate-b.webp)',
-            }}
-          />
-        </div>
-      </div>
-    </section>
+    <PersonaTestimonial
+      testimonials={LITE_TESTIMONIALS}
+      sectionClassName="bg-cream py-[76px] lg:py-[96px]"
+      containerClassName="px-[24px] md:px-[40px] lg:px-[62px]"
+    />
   )
 }
 
@@ -1101,55 +1059,39 @@ function Pricing() {
  * in the negative what the fit test now says in the positive, and repeating it
  * here put a list of what Lite lacks directly in the path to checkout.
  */
-const FAQ_GROUPS: { label: string; items: [string, string][] }[] = [
-  {
-    label: 'How it works',
-    items: [
-      [
-        'Do I need an AMS to use Cooper Lite?',
-        'No. Cooper Lite works from your inbox and files. You don’t need an AMS to get started.',
-      ],
-      [
-        'Does Lite submit into carrier portals for me?',
-        'No. Lite prepares the completed submission package for you to review and send. Automated carrier portal entry, raters, and AMS integrations are available with Cooper.',
-      ],
-    ],
-  },
-  {
-    label: 'Your data',
-    items: [
-      [
-        'Is my client data used to train models?',
-        'No. Your submissions, client information, and carrier data are not used to train models.',
-      ],
-    ],
-  },
-  {
-    label: 'Pricing and billing',
-    items: [
-      [
-        'Why is Cooper Lite $99 if the regular price is $499?',
-        'Cooper Lite is normally $499/month. While the self-serve product is new, we’re offering small agencies an introductory price of $99/month. If the price changes in the future, we’ll let you know before it affects your account.',
-      ],
-      [
-        'Are there usage limits?',
-        'Yes. Cooper Lite is designed for the workload of a small agency and includes monthly usage limits. Specific limits will be published before they apply to your account.',
-      ],
-      [
-        'What if Cooper Lite isn’t right for us?',
-        'If Cooper Lite isn’t right for your agency, tell us within 7 days of your first payment and we’ll refund it in full.',
-      ],
-    ],
-  },
-  {
-    label: 'Lite or Cooper',
-    items: [
-      [
-        'When should we use Cooper instead of Lite?',
-        'Cooper is built for organizations that need it deployed across teams and systems, with AMS integrations, carrier portals and raters, higher-volume workflows, guided implementation, dedicated support, and additional security and governance.',
-      ],
-    ],
-  },
+/* One flat list, in the order a reader actually asks these: can we start, what
+   does it do, what happens to our data, what does it cost, what if it is wrong
+   for us, and when do we outgrow it. The four category headings that used to
+   split this were a tier of structure eight questions do not need. */
+const FAQ: [string, string][] = [
+  [
+    'Do I need an AMS to use Cooper Lite?',
+    'No. Cooper Lite works from your inbox and files. You don\u2019t need an AMS to get started.',
+  ],
+  [
+    'Does Lite submit into carrier portals for me?',
+    'No. Lite prepares the completed submission package for you to review and send. Automated carrier portal entry, raters, and AMS integrations are available with Cooper.',
+  ],
+  [
+    'Is my client data used to train models?',
+    'No. Your submissions, client information, and carrier data are not used to train models.',
+  ],
+  [
+    'Why is Cooper Lite $99 if the regular price is $499?',
+    'Cooper Lite is normally $499/month. While the self-serve product is new, we\u2019re offering small agencies an introductory price of $99/month. If the price changes in the future, we\u2019ll let you know before it affects your account.',
+  ],
+  [
+    'Are there usage limits?',
+    'Yes. Cooper Lite is designed for the workload of a small agency and includes monthly usage limits. Specific limits will be published before they apply to your account.',
+  ],
+  [
+    'What if Cooper Lite isn\u2019t right for us?',
+    'If Cooper Lite isn\u2019t right for your agency, tell us within 7 days of your first payment and we\u2019ll refund it in full.',
+  ],
+  [
+    'When should we use Cooper instead of Lite?',
+    'Cooper is built for organizations that need it deployed across teams and systems, with AMS integrations, carrier portals and raters, higher-volume workflows, guided implementation, dedicated support, and additional security and governance.',
+  ],
 ]
 
 function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
@@ -1162,32 +1104,38 @@ function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
         aria-expanded={open}
         className="flex w-full items-center justify-between gap-[20px] py-[18px] text-left"
       >
+        {/* Open used to recolour the question to accent-orange, which was wrong
+            twice over: 3.56:1 on this canvas, so the one question you had opened
+            was the least legible text on the page; and orange is this page's
+            action colour, so an already-open question read as a link. Weight and
+            the icon carry the state now, and neither is colour alone. */}
         <span
-          className={`text-[15px] leading-[1.45] transition-colors duration-200 ${
-            open ? 'text-accent-orange' : 'text-dark-2'
-          }`}
+          className={`text-[16px] leading-[1.45] text-dark-2 ${open ? 'font-medium' : ''}`}
         >
           {q}
         </span>
         {open ? (
-          <Minus size={14} className="shrink-0 text-accent-orange" />
+          <Minus size={14} className="shrink-0 text-dark-2" />
         ) : (
           <Plus size={14} className="shrink-0 text-muted" />
         )}
       </button>
-      {open && <p className="pb-[20px] pr-[34px] text-[14.5px] leading-[1.6] text-muted">{a}</p>}
+      {open && (
+        <p className="max-w-[68ch] pb-[20px] pr-[34px] text-[14.5px] leading-[1.6] text-muted-2">
+          {a}
+        </p>
+      )}
     </div>
   )
 }
 
 function Faq() {
-  let n = 0
   return (
     <section
       id="faq"
       className="scroll-mt-[74px] bg-lite-canvas px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[96px]"
     >
-      <div className="grid grid-cols-1 gap-[36px] lg:grid-cols-[minmax(0,340px)_1fr] lg:gap-[72px]">
+      <div className="grid grid-cols-1 gap-[36px] lg:grid-cols-[minmax(0,340px)_minmax(0,760px)] lg:justify-between lg:gap-[72px]">
         <div>
           <p className="font-grotesk mb-[14px] text-[11px] uppercase tracking-[.16em] text-accent-orange">
             Before you start
@@ -1219,20 +1167,17 @@ function Faq() {
           </div>
         </div>
 
-        <div>
-          {FAQ_GROUPS.map((group) => (
-            <div key={group.label} className="mb-[26px] last:mb-0">
-              <p className="font-grotesk mb-[6px] text-[10px] uppercase tracking-[.14em] text-muted">
-                {group.label}
-              </p>
-              <div className="border-t border-lite-line">
-                {group.items.map(([q, a]) => (
-                  // The first question opens by default, so the pattern is
-                  // legible without the reader having to try it.
-                  <FaqItem key={q} q={q} a={a} defaultOpen={n++ === 0} />
-                ))}
-              </div>
-            </div>
+        {/* Capped in the track, not with a max-width on a free 1fr: uncapped, at a
+            1840px viewport the list ran 1304px, which put answers near 200
+            characters a line and parked every +/- about 1300px from the question
+            it belongs to. Capping inside a 1fr left the slack hanging off the
+            right edge instead, so the track carries the cap and justify-between
+            pins the list to the right margin. */}
+        <div className="border-t border-lite-line">
+          {FAQ.map(([q, a], i) => (
+            // The first question opens by default, so the pattern is legible
+            // without the reader having to try it.
+            <FaqItem key={q} q={q} a={a} defaultOpen={i === 0} />
           ))}
         </div>
       </div>
@@ -1312,31 +1257,50 @@ function Closing() {
         </p>
       </div>
 
-      {/* The action spans the field rather than sitting in the corner of it. The
-          two thirds to its right were empty, which on a full-bleed dark block
-          reads as a mistake rather than as space. */}
-      <a
-        href={SIGNUP_URL}
-        className="mt-[38px] flex items-center justify-center gap-[12px] rounded-full bg-accent-orange px-[32px] py-[22px] text-[17px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
-      >
-        Get started <ArrowRight size={18} weight="bold" />
-      </a>
+      {/* Two clusters with air between them: the primary on the left edge, the
+          two secondaries on the right edge, and the middle left empty.
 
-      <div className="mt-[12px] grid grid-cols-1 gap-[12px] sm:grid-cols-2">
-        {(
-          [
-            ['Compare Lite and Cooper', COMPARE_URL],
-            ['Log in to your workspace', LOGIN_URL],
-          ] as [string, string][]
-        ).map(([label, href]) => (
-          <a
-            key={label}
-            href={href}
-            className="flex items-center justify-center gap-[10px] rounded-full border border-cream-light/20 px-[24px] py-[18px] text-[15px] text-cream-light/85 transition-colors duration-200 hover:border-cream-light/45 hover:text-cream-light"
-          >
-            {label} <ArrowRight size={15} weight="bold" />
-          </a>
-        ))}
+          The right track is `minmax(0,42%)`, the same track the lede above sits
+          in, so the pair starts on the lede's left edge instead of 194px inside
+          it. A percentage track resolves against the grid's content box rather
+          than against what the gaps leave, so 42% here lands on exactly the
+          same x as 42% up there even though the two rows gap differently.
+
+          The two flexible tracks left of it split the remainder, which puts the
+          primary and the empty middle at roughly a third each. Equal thirds for
+          all three do not survive the labels: a third shared by two buttons is
+          a sixth, and "Compare Lite and Cooper" needs about 243px at this size.
+
+          The breakpoint is 1400 rather than xl. Measured: the labels sit on one
+          line down to 1400, where each button is 262px, and wrap to two at 1360
+          where they are 254px. xl would put the row on screen at 1280, where a
+          button is 237px and both labels break. Below 1400 the three stack. Row
+          heights come from the grid, so the shorter secondaries stretch to the
+          primary without matched padding. */}
+      <div className="mt-[38px] grid grid-cols-1 gap-[12px] min-[1400px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,42%)]">
+        <a
+          href={SIGNUP_URL}
+          className="flex items-center justify-center gap-[12px] rounded-full bg-accent-orange px-[32px] py-[22px] text-[17px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
+        >
+          Get started <ArrowRight size={18} weight="bold" />
+        </a>
+
+        <div className="grid grid-cols-1 gap-[12px] sm:grid-cols-2 min-[1400px]:col-start-3">
+          {(
+            [
+              ['Compare Lite and Cooper', COMPARE_URL],
+              ['Log in to your workspace', LOGIN_URL],
+            ] as [string, string][]
+          ).map(([label, href]) => (
+            <a
+              key={label}
+              href={href}
+              className="flex items-center justify-center gap-[10px] rounded-full border border-cream-light/20 px-[24px] py-[18px] text-[15px] text-cream-light/85 transition-colors duration-200 hover:border-cream-light/45 hover:text-cream-light"
+            >
+              {label} <ArrowRight size={15} weight="bold" />
+            </a>
+          ))}
+        </div>
       </div>
 
       <p className="mt-[20px] text-center text-[13px] text-cream-light/55">
