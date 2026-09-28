@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { personas, getPersonaBySlug } from '../data/personas'
+import { personas, getPersonaBySlug, allTestimonials } from '../data/personas'
 import type { Feature } from '../data/personas'
 import { getHeroImage, getFeatureImages, getStatsBand } from '../data/personaMedia'
 import { vignettes } from './persona/vignettes'
@@ -11,9 +11,6 @@ import StableWidth from './StableWidth'
 import Footer from './Footer'
 import { useSeo } from '../lib/useSeo'
 import { personaJsonLd } from '../lib/personaSchema'
-
-/* All testimonials pooled across every persona — used by the shared component */
-const allPersonaTestimonials = personas.flatMap((p) => p.testimonials)
 
 function RevealOnScroll({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -419,7 +416,7 @@ export default function PersonaPage() {
 
       {/* Testimonial — same pooled list on every persona page */}
       <RevealOnScroll>
-        <PersonaTestimonial testimonials={allPersonaTestimonials} />
+        <PersonaTestimonial testimonials={allTestimonials} />
       </RevealOnScroll>
 
       {/* CTA Section */}

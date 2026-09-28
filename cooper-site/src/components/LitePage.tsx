@@ -27,88 +27,36 @@ import {
   Plus,
   ShieldCheck,
 } from '@phosphor-icons/react'
+import {
+  ANCHOR_OFFSET,
+  COMPARE_PATH,
+  LiteFooter,
+  CooperLiteLockup,
+  LiteNav,
+  SectionHead,
+  SIGNUP_URL,
+} from './lite/chrome'
 import { useSeo } from '../lib/useSeo'
 import { pageJsonLd } from '../lib/pageSchema'
-
-/* Signup, the plan comparison and the workspace all live in the product app,
-   not in this marketing repo, so these stay absolute. */
-const SIGNUP_URL = 'https://www.askcooper.ai/lite/signup'
-const COMPARE_URL = 'https://www.askcooper.ai/lite/compare'
-const LOGIN_URL = 'https://workspace.askcooper.ai/sign-in'
-
-/* ── Cooper Lite lockup ──────────────────────────────────────── */
-
-/**
- * Wordmark plus the LITE badge, the same lockup the nav carries. Shared so the
- * two never drift; the caller sizes it, since it appears both at nav scale and
- * inline inside a 13px pill.
- */
-function CooperLiteLockup({
-  logo = 'h-[20px]',
-  badge = 'text-[10px] px-[7px] py-[3px]',
-  gap = 'gap-[12px]',
-  onDark = false,
-}: {
-  logo?: string
-  badge?: string
-  gap?: string
-  onDark?: boolean
-}) {
-  return (
-    <span className={`flex items-center ${gap}`}>
-      <img
-        src="/images/cooper-logo-full.svg"
-        alt="Cooper"
-        width={154}
-        height={36}
-        // The mark ships black; on the dark closing field it has to be knocked
-        // back out to cream.
-        className={`${logo} w-auto ${onDark ? 'brightness-0 invert' : 'brightness-0'}`}
-      />
-      <span
-        className={`font-grotesk uppercase tracking-[.14em] text-accent-orange border border-accent-orange/35 rounded-[3px] ${badge}`}
-      >
-        Lite
-      </span>
-    </span>
-  )
-}
-
-/* ── Nav ─────────────────────────────────────────────────────── */
-
-function LiteNav() {
-  return (
-    <nav className="relative z-20 flex items-center justify-between px-[20px] py-[16px] md:px-[40px] md:py-[22px]">
-      <a href="/lite">
-        <CooperLiteLockup />
-      </a>
-
-      <div className="flex items-center gap-[10px] md:gap-[30px]">
-        <a href="#how" className="hidden md:inline text-[14px] text-dark-2/85 hover:text-dark-2">
-          How it works
-        </a>
-        <a href="#work" className="hidden md:inline text-[14px] text-dark-2/85 hover:text-dark-2">
-          What Cooper does
-        </a>
-        <a href="#pricing" className="hidden md:inline text-[14px] text-dark-2/85 hover:text-dark-2">
-          Pricing
-        </a>
-        <a
-          href={LOGIN_URL}
-          className="whitespace-nowrap text-[14px] text-dark-2 border border-lite-line rounded-[4px] px-[12px] py-[8px] md:px-[16px]"
-        >
-          Log in
-        </a>
-        <a
-          href={SIGNUP_URL}
-          className="inline-flex items-center gap-[8px] whitespace-nowrap text-[14px] text-cream-light bg-dark-2 rounded-[4px] px-[13px] py-[9px] md:px-[17px]"
-        >
-          Get started <ArrowRight size={14} weight="bold" />
-        </a>
-      </div>
-    </nav>
-  )
-}
+import PersonaTestimonial from './PersonaTestimonial'
+import {
+  AcordsPanel,
+  LossRunsPanel,
+  PackagePanel,
+  ProposalsPanel,
+  QuotesPanel,
+  ServicePanel,
+} from './LiteCapabilityPanels'
+import type { ComponentType } from 'react'
+import { useSectionClock } from './lite/motion/useSectionClock'
+import type { PanelProps } from './lite/panels/types'
+import { ACORDS_END } from './lite/panels/acords.timeline'
+import { LOSS_END } from './lite/panels/lossRuns.timeline'
+import { PACKAGE_END } from './lite/panels/package.timeline'
+import { QUOTES_END } from './lite/panels/quotes.timeline'
+import { PROPOSAL_END } from './lite/panels/proposal.timeline'
+import { SERVICE_END } from './lite/panels/service.timeline'
+import { allTestimonials } from '../data/personas'
 
 /* ── Hero ────────────────────────────────────────────────────── */
 
@@ -118,7 +66,7 @@ function LiteHero() {
       className="
         grid grid-cols-1
         lg:grid-cols-[minmax(400px,37%)_1fr] lg:gap-[48px] lg:pl-[40px]
-        lg:h-[calc(100svh-79px)] lg:min-h-[660px]
+        lg:h-[calc(100svh-83px)] lg:min-h-[660px]
       "
     >
       <div className="flex flex-col px-[24px] pt-[28px] pb-[34px] lg:px-0 lg:py-[44px]">
@@ -145,28 +93,52 @@ function LiteHero() {
 
         {/* The brand book asks for key numbers at the typographic scale of a
             cover story, not a KPI widget, so the price is set in the serif and
-            the old price steps back to a footnote beside it. */}
-        <div className="flex flex-wrap items-end gap-[14px] mb-[20px] lg:gap-[18px] lg:mb-[22px]">
-          <p className="flex items-baseline font-serif font-normal text-[46px] leading-[.92] tracking-[-.02em] text-dark-2 lg:text-[clamp(42px,3.6vw,56px)]">
-            <span className="text-[.52em] mr-[.06em]">$</span>99
-            <span className="font-sans text-[15px] font-normal tracking-normal text-muted ml-[9px]">
-              /month
-            </span>
-          </p>
-          <p className="flex flex-col gap-[5px] pb-[5px]">
-            <span className="text-[14px] text-muted/70 line-through">$499/month</span>
-            <span className="font-grotesk text-[10px] uppercase tracking-[.15em] text-accent-orange">
-              Introductory pricing
-            </span>
-          </p>
-        </div>
+            the old price steps back to a footnote beside it.
 
-        <a
-          href={SIGNUP_URL}
-          className="self-start mb-[16px] inline-flex items-center gap-[10px] rounded-[4px] bg-accent-orange px-[22px] py-[14px] text-[15px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
-        >
-          Get started <ArrowRight size={16} weight="bold" />
-        </a>
+            The two columns hang from one shared baseline, the number's, which
+            is why this is `items-baseline-last` and not `items-end`. `items-end`
+            aligns boxes, and the number's box bottom is not its baseline: the
+            .92 leading pulls the line box in tighter than the em, so the gap
+            between baseline and box bottom is a function of the font size. With
+            the size on a viewport clamp, that gap moves as the window moves,
+            and no fixed padding on the footnote can answer it. Aligning the
+            last baseline instead makes the label land on the number's baseline
+            exactly, at every width. */}
+        {/* The offer and its button are one block, sized by `w-fit` to whatever
+            the price needs. That is what gives the button a right edge worth
+            having: it stops exactly under the end of "Introductory pricing"
+            instead of at whatever width the words "Get started" happen to be.
+            The width has to be inherited rather than typed, because the price
+            is on a viewport clamp and the footnote is translatable, so any
+            number written here would be wrong at the next breakpoint or in the
+            next language. On a narrow phone `fit-content` caps at the column,
+            the price wraps, and the button goes full width, which is where a
+            phone wants it anyway. */}
+        <div className="self-start w-fit mb-[16px]">
+          <div className="flex flex-wrap items-baseline-last gap-x-[22px] gap-y-[8px] mb-[20px] lg:gap-x-[28px] lg:mb-[22px]">
+            <p className="flex items-baseline font-serif font-normal text-[46px] leading-[.92] tracking-[-.02em] text-dark-2 lg:text-[clamp(42px,3.6vw,56px)]">
+              <span className="text-[.52em] mr-[.06em]">$</span>99
+              <span className="font-sans text-[15px] font-normal tracking-normal text-muted ml-[9px]">
+                /month
+              </span>
+            </p>
+            {/* Tight enough that the old price and the label read as one footnote
+                rather than as two loose lines beside the number. */}
+            <p className="flex flex-col gap-[3px]">
+              <span className="text-[14px] text-muted/70 line-through">$499/month</span>
+              <span className="font-grotesk text-[10px] uppercase tracking-[.15em] text-accent-orange">
+                Introductory pricing
+              </span>
+            </p>
+          </div>
+
+          <a
+            href={SIGNUP_URL}
+            className="flex w-full items-center justify-center gap-[10px] rounded-[4px] bg-accent-orange px-[22px] py-[14px] text-[15px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
+          >
+            Get started <ArrowRight size={16} weight="bold" />
+          </a>
+        </div>
 
         <p className="text-[13px] leading-[1.5] text-muted/85">
           Up to 5 users · Limited monthly usage · 7-day money-back guarantee
@@ -231,48 +203,6 @@ function TrustBar() {
           <span className="text-[13.5px] leading-[1.5] text-muted">{body}</span>
         </div>
       ))}
-    </div>
-  )
-}
-
-/* ── Section furniture ───────────────────────────────────────── */
-
-function SectionHead({
-  eyebrow,
-  title,
-  lead,
-  dark = false,
-}: {
-  eyebrow: string
-  title: string
-  lead?: string
-  dark?: boolean
-}) {
-  return (
-    <div className="mb-[44px]">
-      <p
-        className={`font-grotesk text-[11px] uppercase tracking-[.16em] mb-[14px] ${
-          dark ? 'text-accent-orange' : 'text-accent-orange'
-        }`}
-      >
-        {eyebrow}
-      </p>
-      <h2
-        className={`font-serif font-normal text-[clamp(30px,4.4vw,44px)] leading-[1.12] tracking-[-.015em] max-w-[18ch] ${
-          dark ? 'text-cream-light' : 'text-dark-2'
-        }`}
-      >
-        {title}
-      </h2>
-      {lead && (
-        <p
-          className={`mt-[18px] max-w-[62ch] text-[16px] leading-[1.6] ${
-            dark ? 'text-cream-light/70' : 'text-muted'
-          }`}
-        >
-          {lead}
-        </p>
-      )}
     </div>
   )
 }
@@ -537,7 +467,7 @@ function HowItWorks() {
   return (
     <section
       id="how"
-      className="scroll-mt-[74px] bg-lite-canvas px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[100px]"
+      className={`${ANCHOR_OFFSET} bg-lite-canvas px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[100px]`}
     >
       <SectionHead
         eyebrow="How it works"
@@ -616,76 +546,106 @@ function HowItWorks() {
 /* ── What Cooper does ────────────────────────────────────────── */
 
 /**
- * `shot` is a real screen from the Cooper product, not a mock, and `plate` is
- * the reeded-glass texture behind it. Each capability gets its own plate so the
- * panel visibly changes even where two screens look alike, while all six stay
- * the same brand texture.
+ * `Panel` is an abstract screen drawn in code, not a capture of the running
+ * product, and `plate` is the reeded-glass texture behind it. Each capability
+ * gets its own plate so the panel visibly changes even where two screens have
+ * the same shape, while all six stay the same brand texture. See
+ * LiteCapabilityPanels.tsx for why these are drawn rather than photographed.
  */
-const CAPABILITIES = [
+type Capability = {
+  n: string
+  stage: string
+  title: string
+  body: string
+  Panel: ComponentType<PanelProps>
+  /** Last frame of the panel's scene: its hold. */
+  end: number
+  plate: string
+  alt: string
+}
+
+const CAPABILITIES: Capability[] = [
   {
     n: '01',
     stage: 'Submission',
     title: 'Complete ACORDs and market supplementals',
     body: 'Cooper uses information already in the account to complete hundreds of commercial ACORD forms and market supplemental applications.',
-    shot: '/images/lite/cap-acords.webp',
+    Panel: AcordsPanel,
+    end: ACORDS_END,
     plate: '/images/lite/plate-a.webp',
-    alt: 'Completed ACORD 125, 126 and 140 forms filed against their accounts in Cooper',
+    alt: 'A completed commercial application, its fields filled from the account',
   },
   {
     n: '02',
     stage: 'Submission',
     title: 'Summarize loss runs',
     body: 'Turn years of loss runs into a structured loss history you can review and use in the submission.',
-    shot: '/images/lite/cap-lossruns.webp',
+    Panel: LossRunsPanel,
+    end: LOSS_END,
     plate: '/images/lite/plate-b.webp',
-    alt: 'A multi-year loss run open in Cooper beside the account it belongs to',
+    alt: 'A five-year loss history summarized into claim counts and incurred amounts',
   },
   {
     n: '03',
     stage: 'Submission',
     title: 'Build submission packages',
     body: 'Organize completed forms, the account summary, and supporting documents into a clean submission package ready to send to market.',
-    shot: '/images/lite/cap-package.webp',
+    Panel: PackagePanel,
+    end: PACKAGE_END,
     plate: '/images/lite/plate-c.webp',
-    alt: 'An assembled submission package in Cooper: completed forms, schedules and supporting documents',
+    alt: 'An assembled submission package: forms, statement of values, loss summary and narrative',
   },
   {
     n: '04',
     stage: 'Quotes',
     title: 'Compare quotes',
     body: 'Normalize carrier quotes side by side so limits, deductibles, and coverage differences are easier to review.',
-    shot: '/images/lite/cap-quotes.webp',
+    Panel: QuotesPanel,
+    end: QUOTES_END,
     plate: '/images/lite/plate-d.webp',
-    alt: 'A carrier quote open in Cooper from a quote comparison session',
+    alt: 'Three market quotes normalized side by side on limit, deductible and premium',
   },
   {
     n: '05',
     stage: 'Proposals',
     title: 'Draft client proposals',
     body: 'Turn selected quote options into an agency-branded proposal without re-entering the details.',
-    shot: '/images/lite/cap-proposals.webp',
+    Panel: ProposalsPanel,
+    end: PROPOSAL_END,
     plate: '/images/lite/plate-e.webp',
-    alt: 'A renewal proposal open in Cooper, with its coverage summary and annual premium',
+    alt: 'A client proposal draft listing each coverage line and the annual premium',
   },
   {
     n: '06',
     stage: 'Service',
     title: 'Prepare service and renewal work',
     body: 'Use information already on the account to prepare certificates, endorsements, and renewal work.',
-    shot: '/images/lite/cap-service.webp',
+    Panel: ServicePanel,
+    end: SERVICE_END,
     plate: '/images/lite/plate-f.webp',
-    alt: 'A certificate of insurance open in Cooper against the account it was prepared for',
+    alt: 'A service and renewal queue: a certificate and an endorsement done, renewal exposures in progress, 22 days to renewal',
   },
 ]
 
+const PANEL_ENDS = CAPABILITIES.map((c) => c.end)
+
 function WhatCooperDoes() {
-  const [active, setActive] = useState(0)
+  const { view, binds, select, hover, focus, attachPlate, attachExit, attachBar } = useSectionClock(PANEL_ENDS)
+  const { active, outgoing, touring } = view
   const current = CAPABILITIES[active]
 
   return (
     <section
       id="work"
-      className="scroll-mt-[74px] bg-cream-light px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[100px]"
+      className={`${ANCHOR_OFFSET} bg-cream-light px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[100px]`}
+      /* The tour waits while keyboard focus is anywhere in the section (moving between
+         items is not leaving it) or the pointer is on the list, and stops for good on the
+         reader's first pick. Pausing on the whole section would stop it for any mouse user
+         whose pointer simply rests on the page while they read. */
+      onFocus={() => focus(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) focus(false)
+      }}
     >
       <SectionHead
         eyebrow="What Cooper does"
@@ -694,35 +654,48 @@ function WhatCooperDoes() {
       />
 
       <div className="grid grid-cols-1 gap-[26px] lg:grid-cols-[minmax(300px,31%)_1fr] lg:gap-[40px]">
-        <div className="flex flex-col">
+        <div className="flex flex-col" onPointerEnter={() => hover(true)} onPointerLeave={() => hover(false)}>
           {CAPABILITIES.map((cap, i) => {
             const on = i === active
             return (
               <button
                 key={cap.n}
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => select(i)}
                 aria-current={on}
-                className={`border-b border-lite-line text-left transition-colors duration-200 last:border-b-0 ${
+                className={`relative border-b border-lite-line text-left transition-colors duration-200 last:border-b-0 ${
                   on ? 'border-b-transparent bg-lite-surface px-[20px] py-[18px]' : 'px-[20px] py-[16px] hover:bg-lite-surface/50'
                 }`}
               >
                 <span className="mb-[6px] flex items-center gap-[9px]">
-                  <span className="font-grotesk text-[11px] tabular-nums text-accent-orange">
-                    {cap.n}
-                  </span>
-                  <span className="font-grotesk text-[10px] uppercase tracking-[.14em] text-muted">
-                    {cap.stage}
-                  </span>
+                  <span className="font-grotesk text-[11px] tabular-nums text-accent-orange">{cap.n}</span>
+                  <span className="font-grotesk text-[10px] uppercase tracking-[.14em] text-muted">{cap.stage}</span>
                 </span>
-                <span className="block font-serif text-[19px] leading-[1.25] text-dark-2">
-                  {cap.title}
-                </span>
+                <span className="block font-serif text-[19px] leading-[1.25] text-dark-2">{cap.title}</span>
                 {/* Only the open row carries its description, so the column stays a
                     list of titles rather than six paragraphs competing at once. */}
                 {on && (
-                  <span className="mt-[8px] block text-[14px] leading-[1.55] text-muted">
+                  /* The six descriptions run 2 to 4 lines depending on which one
+                     is open and how wide the window is, and this column is what
+                     sets the height of the whole row, so picking a different
+                     capability used to move everything below the section by
+                     about 21px. The screenshots hid it by being tall enough to
+                     win the row; the drawn panel is not, so the slot gets
+                     reserved instead. 6.2em is four lines at this leading, and
+                     three is enough once the column is wide. */
+                  <span className="mt-[8px] block text-[14px] leading-[1.55] text-muted lg:min-h-[6.2em] 2xl:min-h-[4.65em]">
                     {cap.body}
+                  </span>
+                )}
+                {/* The tour's progress: fills across the panel and its rest, then the next row opens. */}
+                {on && touring && (
+                  <span aria-hidden className="absolute inset-x-0 bottom-0 h-[2px] bg-lite-line">
+                    <span
+                      ref={attachBar}
+                      data-tour-bar
+                      className="block h-full origin-left bg-dark-2/50"
+                      style={{ transform: 'scaleX(0)' }}
+                    />
                   </span>
                 )}
               </button>
@@ -730,179 +703,31 @@ function WhatCooperDoes() {
           })}
         </div>
 
-        {/* The plate is the brand book's reeded-glass texture, generated for this
-            use. Keeping it as a CSS background rather than baking it into each
-            screenshot means one file serves all six and swapping a screen is a
-            file drop. */}
+        {/* The plate is the brand book's reeded-glass texture; each capability has its own. It is
+            also what the clock watches: the panels play once at least 30% of it is on screen.
+            `role`/`aria-label` because this is a picture of a screen: a screen reader gets the
+            sentence and moves on. The panel that is leaving lies on top of the new one for seven
+            frames while it rises and blurs out. */}
         <div
+          ref={attachPlate}
           className="relative flex min-h-[280px] items-center justify-center overflow-hidden bg-dark-2 bg-cover bg-center p-[18px] transition-[background-image] duration-300 sm:p-[42px] lg:min-h-[520px] lg:p-[56px]"
           style={{ backgroundImage: `url(${current.plate})` }}
         >
-          <img
-            key={current.shot}
-            src={current.shot}
-            alt={current.alt}
-            loading="lazy"
-            className="w-full rounded-[6px] shadow-[0_28px_70px_-14px_rgba(29,26,23,.5)] animate-fade-in"
-          />
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ── Fit test ────────────────────────────────────────────────── */
-
-/**
- * The section this replaces repeated the trust bar almost verbatim: two of its
- * three columns restated "hundreds of forms" and "no AMS needed". The one fact
- * only it carried was which lines Cooper writes, so that became the first
- * criterion here.
- *
- * Every statement is one the page already stands behind, including the last,
- * which is the honest disqualifier currently buried in the FAQ as a negative.
- * A reader who cannot tick it should be on Cooper, not Lite, and saying so
- * costs nothing and buys a lot.
- */
-const FIT = [
-  'We write commercial P&C: property, general liability, workers’ comp, commercial auto, cyber or E&S.',
-  'Five or fewer people would use it.',
-  'Our submissions start from emailed documents: dec pages, loss runs, applications and schedules.',
-  'We re-key the same account data across ACORDs and market supplementals.',
-  'We have no AMS, or we would rather not connect one to get started.',
-  'We want to start on our own, without an implementation project.',
-  'We are happy to review Cooper’s work before it goes to market.',
-  'We do not need SOC 2 Type II, HIPAA, RBAC or full audit logs today.',
-]
-
-const BANDS = [
-  {
-    range: '0 – 3',
-    title: 'Cooper, not Lite',
-    body: 'Lite is built for a narrow shape of agency. At this score you would be working against it. Cooper covers the integrations, volume and governance Lite leaves out.',
-    cta: { label: 'Compare Lite and Cooper', href: COMPARE_URL },
-  },
-  {
-    range: '4 – 6',
-    title: 'Likely a fit',
-    body: 'Most of Lite would land. Start with one submission and see, and the 7-day money-back guarantee covers you if it does not.',
-    cta: { label: 'Get started', href: SIGNUP_URL },
-  },
-  {
-    range: '7 – 8',
-    title: 'Strong fit',
-    body: 'This is exactly the agency Lite was built for. Forward the next submission in your inbox and Cooper will prepare it.',
-    cta: { label: 'Get started', href: SIGNUP_URL },
-  },
-]
-
-const bandFor = (score: number) => (score <= 3 ? 0 : score <= 6 ? 1 : 2)
-
-function FitTest() {
-  const [ticked, setTicked] = useState<boolean[]>(() => FIT.map(() => false))
-  const score = ticked.filter(Boolean).length
-  // The panel stays out until the reader commits to a first tick, so the
-  // section opens as one calm card rather than a scored quiz.
-  const scoring = score > 0
-  const band = bandFor(score)
-
-  return (
-    <section className="bg-lite-surface px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[96px]">
-      <div className="mx-auto mb-[40px] max-w-[640px] text-center">
-        <span className="font-grotesk inline-block rounded-full bg-accent-orange/10 px-[14px] py-[6px] text-[10px] uppercase tracking-[.15em] text-accent-orange">
-          60-second fit test
-        </span>
-        <h2 className="mt-[18px] font-serif text-[clamp(28px,3.8vw,42px)] font-normal leading-[1.12] tracking-[-.015em] text-dark-2">
-          Is Cooper Lite right for your agency?
-        </h2>
-        <p className="mt-[14px] text-[15px] leading-[1.6] text-muted">
-          Tick what is true. Nothing is sent anywhere, the score is worked out on this page.
-        </p>
-      </div>
-
-      {/* The tray widens and the panel slides in from zero width, which is what
-          moves the checklist off centre without it ever jumping. */}
-      <div
-        className={`mx-auto rounded-[14px] bg-lite-canvas p-[8px] transition-[max-width] duration-500 ease-out ${
-          scoring ? 'max-w-[1060px]' : 'max-w-[680px]'
-        }`}
-      >
-        <div className="flex flex-col lg:flex-row">
-          <ul className="flex-1 rounded-[10px] bg-cream-light px-[20px] py-[6px] sm:px-[28px]">
-            {FIT.map((line, i) => (
-              <li key={line} className="border-b border-lite-line/70 last:border-b-0">
-                <label className="flex cursor-pointer items-start gap-[14px] py-[16px]">
-                  <input
-                    type="checkbox"
-                    checked={ticked[i]}
-                    onChange={() =>
-                      setTicked((prev) => prev.map((v, j) => (j === i ? !v : v)))
-                    }
-                    className="mt-[2px] h-[18px] w-[18px] shrink-0 cursor-pointer accent-dark-2"
-                  />
-                  <span
-                    className={`text-[14.5px] leading-[1.5] transition-colors duration-200 ${
-                      ticked[i] ? 'text-accent-orange' : 'text-dark-2'
-                    }`}
-                  >
-                    {line}
-                  </span>
-                </label>
-              </li>
-            ))}
-          </ul>
-
-          <div
-            aria-live="polite"
-            className={`overflow-hidden transition-[max-height,width,opacity] duration-500 ease-out ${
-              scoring
-                ? 'max-h-[900px] opacity-100 lg:w-[42%]'
-                : 'max-h-0 opacity-0 lg:w-0'
-            }`}
-          >
-            <div className="px-[8px] pb-[10px] pt-[24px] sm:px-[26px] lg:pt-[12px]">
-              {BANDS.map((b, i) => {
-                const on = i === band
-                return (
-                  <div
-                    key={b.range}
-                    className={`border-l-2 py-[16px] pl-[18px] transition-colors duration-300 ${
-                      on ? 'border-accent-orange' : 'border-lite-line'
-                    }`}
-                  >
-                    <span
-                      className={`font-grotesk inline-block rounded-[4px] border px-[8px] py-[2px] text-[10px] tabular-nums transition-colors duration-300 ${
-                        on
-                          ? 'border-accent-orange/40 text-accent-orange'
-                          : 'border-lite-line text-muted'
-                      }`}
-                    >
-                      {b.range}
-                    </span>
-                    <h3
-                      className={`mt-[8px] font-serif text-[22px] leading-[1.2] transition-colors duration-300 ${
-                        on ? 'text-dark-2' : 'text-muted/55'
-                      }`}
-                    >
-                      {b.title}
-                    </h3>
-                    {on && (
-                      <p className="mt-[8px] text-[14px] leading-[1.55] text-muted">{b.body}</p>
-                    )}
-                  </div>
-                )
-              })}
-
-              <a
-                href={BANDS[band].cta.href}
-                className="mt-[18px] flex items-center justify-center gap-[10px] rounded-[6px] bg-dark-2 px-[22px] py-[14px] text-[15px] font-medium text-cream-light transition-colors duration-200 hover:bg-black"
-              >
-                {BANDS[band].cta.label} <ArrowRight size={16} weight="bold" />
-              </a>
-              <p className="mt-[10px] text-center text-[12.5px] text-muted">
-                {score} of {FIT.length} ticked
-              </p>
-            </div>
+          <div role="img" aria-label={current.alt} className="relative w-full max-w-[640px]">
+            {CAPABILITIES.map((cap, i) => {
+              if (i !== active && i !== outgoing) return null
+              const leaving = i === outgoing
+              const panel = <cap.Panel bind={binds[i]} />
+              return (
+                <div
+                  key={cap.n}
+                  ref={leaving ? attachExit : undefined}
+                  className={leaving ? 'absolute inset-x-0 top-0 z-[1]' : 'relative'}
+                >
+                  {panel}
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
@@ -913,75 +738,32 @@ function FitTest() {
 /* ── Testimonial ─────────────────────────────────────────────── */
 
 /**
- * The quote is real; the attribution is not yet. Everything the page can say
- * about this customer today is "a principal at a three-person retail agency",
- * and an unattributed quote is the weakest kind of proof there is: a sceptical
- * reader assumes it was written in-house.
+ * This used to be a single quote with no attribution, sitting next to a
+ * decorative disc. It read as something written in-house, because that is what
+ * an unattributed quote reads as, and it was the one thing on the page marked
+ * as needing a human before launch.
  *
- * So the section is built for the attribution we want rather than the one we
- * have. Supply `name` and `portrait` and the layout completes itself; until
- * then the disc carries the brand plate and the name line is simply absent,
- * which is honest. A stock face here would be worse than no face.
+ * It now runs the same slider and the same five customer quotes the persona
+ * pages show. Each one carries the role and the shape of agency that said it,
+ * which is the attribution the section was missing, and reusing the component
+ * means Lite inherits the auto-advance, the progress bar and the
+ * reduced-motion opt-out rather than reimplementing any of them.
+ *
+ * Two editorial calls are left open in the section below: whether the Claims
+ * TPA quote belongs on a page sold to retail agencies, and which quote should
+ * lead.
  */
-const QUOTE = {
-  text: 'I’m a three-person shop competing against agencies with twenty. Cooper is the reason I can quote the same account in a morning instead of a week.',
-  name: null as string | null,
-  role: 'Principal · 3-person retail P&C agency',
-  portrait: null as string | null,
-}
-
 function Testimonial() {
   return (
-    <section className="bg-cream px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[96px]">
-      <div className="grid grid-cols-1 items-center gap-[40px] lg:grid-cols-[1fr_auto] lg:gap-[64px]">
-        <div>
-          <p className="font-grotesk mb-[10px] text-[11px] uppercase tracking-[.16em] text-accent-orange">
-            From a retail agency
-          </p>
-
-          {/* Set as a mark rather than typed into the quote, so it can carry its
-              own size and colour without the text inheriting either. */}
-          <span
-            aria-hidden
-            className="block h-[46px] font-serif text-[92px] leading-[1] text-accent-orange"
-          >
-            &ldquo;
-          </span>
-
-          <blockquote className="mt-[26px] max-w-[24ch] font-serif text-[clamp(26px,3.2vw,40px)] leading-[1.24] tracking-[-.01em] text-dark-2 sm:max-w-[30ch]">
-            {QUOTE.text}
-          </blockquote>
-
-          <div className="mt-[28px]">
-            {QUOTE.name && (
-              <p className="text-[14px] font-semibold text-dark-2">{QUOTE.name}</p>
-            )}
-            <p className="text-[13.5px] text-muted">{QUOTE.role}</p>
-          </div>
-        </div>
-
-        <div className="relative hidden h-[260px] w-[260px] shrink-0 lg:block">
-          {/* Two flat squares stepping out from under the disc, the quietest
-              way to give the circle something to sit against. */}
-          <span
-            aria-hidden
-            className="absolute bottom-[30px] left-[6px] h-[96px] w-[96px] bg-accent-orange/14"
-          />
-          <span
-            aria-hidden
-            className="absolute bottom-[-4px] left-[70px] h-[58px] w-[58px] bg-accent-orange/22"
-          />
-          <div
-            className="absolute right-0 top-0 h-[220px] w-[220px] overflow-hidden rounded-full bg-lite-surface bg-cover bg-center"
-            style={{
-              backgroundImage: QUOTE.portrait
-                ? `url(${QUOTE.portrait})`
-                : 'url(/images/lite/plate-b.webp)',
-            }}
-          />
-        </div>
-      </div>
-    </section>
+    <PersonaTestimonial
+      testimonials={allTestimonials}
+      /* `bg-cream` keeps this page's rhythm: what Cooper does above and the
+         pricing below both sit on cream-light, so the quote is the one warm
+         band between two paler ones. The persona pages keep their own
+         default. */
+      sectionClassName="bg-cream py-[76px] lg:py-[96px]"
+      containerClassName="mx-auto max-w-[1440px] px-[24px] md:px-[40px] lg:px-[62px]"
+    />
   )
 }
 
@@ -1014,7 +796,7 @@ function Pricing() {
   return (
     <section
       id="pricing"
-      className="scroll-mt-[74px] bg-cream-light px-[24px] py-[84px] md:px-[40px] lg:px-[62px] lg:py-[110px]"
+      className={`${ANCHOR_OFFSET} bg-cream-light px-[24px] py-[84px] md:px-[40px] lg:px-[62px] lg:py-[110px]`}
     >
       {/* No card. The bordered box made the price one more thing inside a
           container; without it the price is the section, which is what a page
@@ -1152,6 +934,24 @@ const FAQ_GROUPS: { label: string; items: [string, string][] }[] = [
   },
 ]
 
+/**
+ * The question and the answer used to be 15px and 14.5px, both at weight 400.
+ * Half a pixel of size and no difference in weight is not a hierarchy, so the
+ * two read as one undifferentiated block and a reader could not scan the
+ * questions, which is the only thing a FAQ is for.
+ *
+ * The question now carries all three levers at once: 17px against the answer's
+ * 15px, semibold against regular, and ink against grey. 17 and 15 are sizes the
+ * page already uses, so this collapses the 14.5px one-off rather than adding a
+ * value.
+ *
+ * The open question is no longer set in ochre. Measured, #d95611 on this
+ * section's canvas is 3.56:1, and WCAG AA wants 4.5:1 for text this size. It
+ * was the least readable line in the section and it was the one being read. The
+ * open state is carried by the icon flipping from + to − and by the answer
+ * appearing, which is shape and content rather than colour, so nothing is lost
+ * for a reader who cannot separate the two hues either.
+ */
 function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
@@ -1162,20 +962,20 @@ function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
         aria-expanded={open}
         className="flex w-full items-center justify-between gap-[20px] py-[18px] text-left"
       >
-        <span
-          className={`text-[15px] leading-[1.45] transition-colors duration-200 ${
-            open ? 'text-accent-orange' : 'text-dark-2'
-          }`}
-        >
-          {q}
-        </span>
+        <span className="text-[17px] font-semibold leading-[1.4] text-dark-2">{q}</span>
         {open ? (
-          <Minus size={14} className="shrink-0 text-accent-orange" />
+          <Minus size={16} className="shrink-0 text-accent-orange" />
         ) : (
-          <Plus size={14} className="shrink-0 text-muted" />
+          <Plus size={16} className="shrink-0 text-muted" />
         )}
       </button>
-      {open && <p className="pb-[20px] pr-[34px] text-[14.5px] leading-[1.6] text-muted">{a}</p>}
+      {/* Uncapped, this column ran to 86 characters a line; comfortable reading
+          tops out around 75. 62ch is not a new number, it is the measure the
+          section leads on this page already use, and it lands the longest
+          answer at exactly 75. */}
+      {open && (
+        <p className="max-w-[62ch] pb-[20px] pr-[34px] text-[15px] leading-[1.6] text-muted">{a}</p>
+      )}
     </div>
   )
 }
@@ -1185,9 +985,17 @@ function Faq() {
   return (
     <section
       id="faq"
-      className="scroll-mt-[74px] bg-lite-canvas px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[96px]"
+      className={`${ANCHOR_OFFSET} bg-lite-canvas px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[96px]`}
     >
-      <div className="grid grid-cols-1 gap-[36px] lg:grid-cols-[minmax(0,340px)_1fr] lg:gap-[72px]">
+      {/* The gap steps rather than sitting on one number. The left column is
+          capped at 340px and its text fills that cap, so whatever the gap is
+          is the entire distance between two dense blocks of text; at 72px they
+          read as one. 120px is the comfortable distance, but it cannot be the
+          only value: at 1024 it squeezes the question column to 440px and
+          "Why is Cooper Lite $99 if the regular price is $499?" wraps to two
+          lines. 96px is the widest that holds every question on one line at
+          that width, so it takes lg and 120 waits for xl. */}
+      <div className="grid grid-cols-1 gap-[36px] lg:grid-cols-[minmax(0,340px)_1fr] lg:gap-x-[96px] xl:gap-x-[120px]">
         <div>
           <p className="font-grotesk mb-[14px] text-[11px] uppercase tracking-[.16em] text-accent-orange">
             Before you start
@@ -1210,29 +1018,27 @@ function Faq() {
               See how Lite and Cooper differ across integrations, volume, implementation, support,
               security, and governance.
             </p>
-            <a
-              href={COMPARE_URL}
+            <Link
+              to={COMPARE_PATH}
               className="mt-[12px] inline-flex items-center gap-[8px] text-[13.5px] font-medium text-accent-orange"
             >
               Compare Lite and Cooper <ArrowRight size={14} weight="bold" />
-            </a>
+            </Link>
           </div>
         </div>
 
-        <div>
-          {FAQ_GROUPS.map((group) => (
-            <div key={group.label} className="mb-[26px] last:mb-0">
-              <p className="font-grotesk mb-[6px] text-[10px] uppercase tracking-[.14em] text-muted">
-                {group.label}
-              </p>
-              <div className="border-t border-lite-line">
-                {group.items.map(([q, a]) => (
-                  // The first question opens by default, so the pattern is
-                  // legible without the reader having to try it.
-                  <FaqItem key={q} q={q} a={a} defaultOpen={n++ === 0} />
-                ))}
-              </div>
-            </div>
+        {/* One unbroken list. The group labels are gone, and the gaps that
+            separated the groups went with them: a 26px break with nothing
+            naming it is just an unexplained hole in a list of seven. The
+            grouping stays in the data because it is what puts the questions in
+            funnel order, how it works, then data, then price, then when to buy
+            Cooper instead, which is the order to read them in whether or not
+            anything is labelled. */}
+        <div className="border-t border-lite-line">
+          {FAQ_GROUPS.flatMap((group) => group.items).map(([q, a]) => (
+            // The first question opens by default, so the pattern is legible
+            // without the reader having to try it.
+            <FaqItem key={q} q={q} a={a} defaultOpen={n++ === 0} />
           ))}
         </div>
       </div>
@@ -1242,138 +1048,52 @@ function Faq() {
 
 /* ── Closing ─────────────────────────────────────────────────── */
 
-/* Everything here already exists in this repo. The live Lite footer links two
-   of these six legal documents, which is thin for a page that takes a card. */
-const FOOTER = [
-  {
-    label: 'Cooper Lite',
-    links: [
-      ['How it works', '#how'],
-      ['What Cooper does', '#work'],
-      ['Pricing', '#pricing'],
-      ['Questions', '#faq'],
-      ['Compare Lite and Cooper', COMPARE_URL],
-    ] as [string, string][],
-  },
-  {
-    label: 'Legal',
-    links: [
-      ['Privacy Policy', '/privacy'],
-      ['Terms of Service', '/terms'],
-      ['Cookie Policy', '/cookie-policy'],
-      ['Data Processing Addendum', '/data-processing-addendum'],
-      ['Subprocessors', '/subprocessors'],
-      ['Master Services Agreement', '/master-services-agreement'],
-    ] as [string, string][],
-  },
-  {
-    label: 'Cooper',
-    links: [
-      ['Cooper for organizations', '/'],
-      ['Integrations', '/integrations'],
-      ['About', '/about'],
-      ['Careers', '/careers'],
-      ['Log in', LOGIN_URL],
-    ] as [string, string][],
-  },
-]
-
-function FooterLink({ label, href }: { label: string; href: string }) {
-  const className =
-    'text-[13.5px] leading-[1.5] text-cream-light/60 transition-colors duration-200 hover:text-cream-light'
-  // Internal routes go through the router; the product app and the plan
-  // comparison live outside this site and have to leave it.
-  return href.startsWith('/') ? (
-    <Link to={href} className={className}>
-      {label}
-    </Link>
-  ) : (
-    <a href={href} className={className}>
-      {label}
-    </a>
-  )
-}
-
 function Closing() {
   return (
     <section className="bg-dark-2 px-[24px] pt-[84px] text-cream-light md:px-[40px] lg:px-[62px] lg:pt-[104px]">
       <p className="font-grotesk mb-[16px] text-[11px] uppercase tracking-[.16em] text-accent-orange">
         Get started
       </p>
-      {/* Headline and lede sit side by side rather than stacked, so the top of
-          the block reaches the right edge instead of trailing off into it. */}
-      <div className="grid grid-cols-1 gap-[20px] lg:grid-cols-[1fr_minmax(0,42%)] lg:items-end lg:gap-[64px]">
-        <h2 className="max-w-[16ch] font-serif text-[clamp(30px,4.6vw,46px)] font-normal leading-[1.12] tracking-[-.015em]">
+      {/* Two columns: the headline and the button that answers it on the left,
+          the explanation on the right. The right column's second row is empty
+          now that Compare and Log in have gone, and that is what keeps the
+          button off the full width of a dark field, where it read as a banner.
+
+          Placement is explicit rather than implied by source order, because the
+          two do not agree. Reading order has to be headline, then what happens,
+          then the button; column order has to put the button under the headline.
+          Writing `col-start` and `row-start` lets the DOM stay in the order a
+          phone and a screen reader want, and the grid do something else from
+          `lg` up. */}
+      <div className="grid grid-cols-1 gap-y-[28px] lg:grid-cols-[1fr_minmax(0,42%)] lg:items-end lg:gap-x-[64px] lg:gap-y-[38px]">
+        <h2 className="max-w-[16ch] font-serif text-[clamp(30px,4.6vw,46px)] font-normal leading-[1.12] tracking-[-.015em] lg:col-start-1 lg:row-start-1">
           Start with the next submission in your inbox.
         </h2>
-        <p className="max-w-[52ch] text-[15.5px] leading-[1.6] text-cream-light/70 lg:pb-[6px]">
+
+        <p className="max-w-[52ch] text-[15.5px] leading-[1.6] text-cream-light/70 lg:col-start-2 lg:row-start-1 lg:pb-[6px]">
           Forward the email or upload the files. Cooper prepares the ACORDs, market supplementals,
           loss summary, and submission package. You review and send it to market.
         </p>
-      </div>
 
-      {/* The action spans the field rather than sitting in the corner of it. The
-          two thirds to its right were empty, which on a full-bleed dark block
-          reads as a mistake rather than as space. */}
-      <a
-        href={SIGNUP_URL}
-        className="mt-[38px] flex items-center justify-center gap-[12px] rounded-full bg-accent-orange px-[32px] py-[22px] text-[17px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
-      >
-        Get started <ArrowRight size={18} weight="bold" />
-      </a>
-
-      <div className="mt-[12px] grid grid-cols-1 gap-[12px] sm:grid-cols-2">
-        {(
-          [
-            ['Compare Lite and Cooper', COMPARE_URL],
-            ['Log in to your workspace', LOGIN_URL],
-          ] as [string, string][]
-        ).map(([label, href]) => (
+        <div className="lg:col-start-1 lg:row-start-2">
           <a
-            key={label}
-            href={href}
-            className="flex items-center justify-center gap-[10px] rounded-full border border-cream-light/20 px-[24px] py-[18px] text-[15px] text-cream-light/85 transition-colors duration-200 hover:border-cream-light/45 hover:text-cream-light"
+            href={SIGNUP_URL}
+            className="flex items-center justify-center rounded-full bg-accent-orange px-[32px] py-[22px] text-[17px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
           >
-            {label} <ArrowRight size={15} weight="bold" />
+            Get started
           </a>
-        ))}
-      </div>
-
-      <p className="mt-[20px] text-center text-[13px] text-cream-light/55">
-        $99/month introductory pricing · Up to 5 users · Limited monthly usage · 7-day money-back
-        guarantee
-      </p>
-
-      <div className="mt-[80px] grid grid-cols-1 gap-[36px] border-t border-cream-light/12 pt-[46px] sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_repeat(3,minmax(0,auto))] lg:gap-[64px]">
-        <div>
-          <CooperLiteLockup onDark logo="h-[19px]" badge="text-[9px] px-[6px] py-[2px]" />
+          {/* The terms belong to this button, so they sit under it rather than
+              centred under the whole block, which is where the hero puts them
+              too. */}
+          <p className="mt-[14px] text-[13px] leading-[1.5] text-cream-light/55">
+            $99/month introductory pricing · Up to 5 users · Limited monthly usage · 7-day
+            money-back guarantee
+          </p>
         </div>
-        {FOOTER.map((col) => (
-          <div key={col.label}>
-            <p className="font-grotesk mb-[14px] text-[10px] uppercase tracking-[.14em] text-cream-light/40">
-              {col.label}
-            </p>
-            <ul className="flex flex-col gap-[9px]">
-              {col.links.map(([label, href]) => (
-                <li key={label}>
-                  <FooterLink label={label} href={href} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
       </div>
 
-      <div className="mt-[46px] flex flex-col gap-[10px] border-t border-cream-light/12 py-[26px] text-[13px] text-cream-light/45 sm:flex-row sm:items-center sm:justify-between">
-        <span>© 2026 Cooper. All rights reserved.</span>
-        <button
-          type="button"
-          onClick={() => window.Cookiebot?.renew()}
-          className="text-left transition-colors duration-200 hover:text-cream-light/80 sm:text-right"
-        >
-          Manage Cookies
-        </button>
-      </div>
+      {/* The footer is its own dark band under this one, so the section ends
+          on the terms line and the space between them is the footer's. */}
     </section>
   )
 }
@@ -1395,17 +1115,17 @@ export default function LitePage() {
 
   return (
     <div className="min-h-screen bg-cream-light">
-      <LiteNav />
+      <LiteNav onHome />
       <LiteHero />
       <TrustBar />
       <Comparison />
       <HowItWorks />
       <WhatCooperDoes />
-      <FitTest />
       <Testimonial />
       <Pricing />
       <Faq />
       <Closing />
+      <LiteFooter onHome />
     </div>
   )
 }

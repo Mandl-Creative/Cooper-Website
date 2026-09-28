@@ -21,6 +21,8 @@ const PersonaPage = lazy(() => import('./components/PersonaPage'))
 const AboutPage = lazy(() => import('./components/AboutPage'))
 const IntegrationsPage = lazy(() => import('./components/IntegrationsPage'))
 const LitePage = lazy(() => import('./components/LitePage'))
+const LiteComparePage = lazy(() => import('./components/LiteComparePage'))
+const LiteSignupPage = lazy(() => import('./components/LiteSignupPage'))
 const RoiCalculatorPage = lazy(() => import('./components/RoiCalculatorPage'))
 const WhitePaperPage = lazy(() => import('./components/WhitePaperPage'))
 const CareersPage = lazy(() => import('./components/CareersPage'))
@@ -48,19 +50,22 @@ function PersonaRedirect() {
   return <Navigate to={`/product/${slug}`} replace />
 }
 
+/** Reader input that cancels a pending anchor jump. */
+const INTERRUPTS = ['wheel', 'touchstart', 'keydown'] as const
+
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
 
   // useLayoutEffect runs before paint, so the new page never flashes at the
   // previous scroll position.
   useLayoutEffect(() => {
-    if (hash) {
-      const el = document.getElementById(hash.slice(1))
-      if (el) {
-        el.scrollIntoView()
-        return
-      }
+    const id = hash ? hash.slice(1) : ''
+    const target = id ? document.getElementById(id) : null
+    if (target) {
+      target.scrollIntoView()
+      return
     }
+
     // Jump instantly to the top, bypassing the global `scroll-behavior: smooth`
     // (which would otherwise animate the page upward instead of starting there).
     const html = document.documentElement
@@ -68,6 +73,41 @@ function ScrollToTop() {
     html.style.scrollBehavior = 'auto'
     window.scrollTo(0, 0)
     html.style.scrollBehavior = prev
+
+    if (!id) return
+
+    // A hash link that crosses routes lands here with the section still
+    // missing: every non-home route is lazy, so its component has not mounted
+    // yet and getElementById finds nothing. Watch for it over the next few
+    // frames and go there once it arrives, which is what makes
+    // /lite/compare → /lite#how open on the section rather than at the top.
+    //
+    // Any input from the reader ends the watch. Waiting a beat and then
+    // yanking someone who has started scrolling is worse than missing the
+    // anchor.
+    let frame = 0
+    let raf = 0
+    let done = false
+    const stop = () => {
+      done = true
+      cancelAnimationFrame(raf)
+      for (const type of INTERRUPTS) window.removeEventListener(type, stop)
+    }
+    const look = () => {
+      if (done) return
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView()
+        stop()
+        return
+      }
+      // ~1.5s at 60fps, well past a lazy chunk on a slow connection.
+      if (++frame < 90) raf = requestAnimationFrame(look)
+      else stop()
+    }
+    for (const type of INTERRUPTS) window.addEventListener(type, stop, { once: true, passive: true })
+    raf = requestAnimationFrame(look)
+    return stop
   }, [pathname, hash])
 
   return null
@@ -149,9 +189,14 @@ export default function App() {
           <Route path="/demo" element={<DemoPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/integrations" element={<IntegrationsPage />} />
-          {/* Cooper Lite: the self-serve tier. Signup and the plan comparison
-              live in the product app, so only the landing page is routed here. */}
+          {/* Cooper Lite: the self-serve tier. These three are design proposals
+              for pages engineering ships from the product app, so every CTA on
+              them still points at the real signup and workspace. /lite/signup is
+              noindex and unlinked: it is a shell for review, not a form that can
+              take a card. */}
           <Route path="/lite" element={<LitePage />} />
+          <Route path="/lite/compare" element={<LiteComparePage />} />
+          <Route path="/lite/signup" element={<LiteSignupPage />} />
           <Route path="/resources/roi-calculator" element={<RoiCalculatorPage />} />
           <Route path="/resources/white-paper" element={<WhitePaperPage />} />
           <Route path="/careers" element={<CareersPage />} />
