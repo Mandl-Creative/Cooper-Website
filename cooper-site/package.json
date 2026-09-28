@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.cjs && node scripts/assert-gate.cjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test \"tests/**/*.test.ts\""
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
