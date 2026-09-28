@@ -47,6 +47,15 @@ import {
   QuotesPanel,
   ServicePanel,
 } from './LiteCapabilityPanels'
+import type { ComponentType } from 'react'
+import { useSectionClock } from './lite/motion/useSectionClock'
+import type { PanelProps } from './lite/panels/types'
+import { ACORDS_END } from './lite/panels/acords.timeline'
+import { LOSS_END } from './lite/panels/lossRuns.timeline'
+import { PACKAGE_END } from './lite/panels/package.timeline'
+import { QUOTES_END } from './lite/panels/quotes.timeline'
+import { PROPOSAL_END } from './lite/panels/proposal.timeline'
+import { SERVICE_END } from './lite/panels/service.timeline'
 import { allTestimonials } from '../data/personas'
 
 /* ── Hero ────────────────────────────────────────────────────── */
@@ -543,13 +552,26 @@ function HowItWorks() {
  * the same shape, while all six stay the same brand texture. See
  * LiteCapabilityPanels.tsx for why these are drawn rather than photographed.
  */
-const CAPABILITIES = [
+type Capability = {
+  n: string
+  stage: string
+  title: string
+  body: string
+  Panel: ComponentType<PanelProps>
+  /** Last frame of the panel's scene: its hold. */
+  end: number
+  plate: string
+  alt: string
+}
+
+const CAPABILITIES: Capability[] = [
   {
     n: '01',
     stage: 'Submission',
     title: 'Complete ACORDs and market supplementals',
     body: 'Cooper uses information already in the account to complete hundreds of commercial ACORD forms and market supplemental applications.',
     Panel: AcordsPanel,
+    end: ACORDS_END,
     plate: '/images/lite/plate-a.webp',
     alt: 'A completed commercial application, its fields filled from the account',
   },
@@ -559,6 +581,7 @@ const CAPABILITIES = [
     title: 'Summarize loss runs',
     body: 'Turn years of loss runs into a structured loss history you can review and use in the submission.',
     Panel: LossRunsPanel,
+    end: LOSS_END,
     plate: '/images/lite/plate-b.webp',
     alt: 'A five-year loss history summarized into claim counts and incurred amounts',
   },
@@ -568,6 +591,7 @@ const CAPABILITIES = [
     title: 'Build submission packages',
     body: 'Organize completed forms, the account summary, and supporting documents into a clean submission package ready to send to market.',
     Panel: PackagePanel,
+    end: PACKAGE_END,
     plate: '/images/lite/plate-c.webp',
     alt: 'An assembled submission package: forms, statement of values, loss summary and narrative',
   },
@@ -577,6 +601,7 @@ const CAPABILITIES = [
     title: 'Compare quotes',
     body: 'Normalize carrier quotes side by side so limits, deductibles, and coverage differences are easier to review.',
     Panel: QuotesPanel,
+    end: QUOTES_END,
     plate: '/images/lite/plate-d.webp',
     alt: 'Three market quotes normalized side by side on limit, deductible and premium',
   },
@@ -586,6 +611,7 @@ const CAPABILITIES = [
     title: 'Draft client proposals',
     body: 'Turn selected quote options into an agency-branded proposal without re-entering the details.',
     Panel: ProposalsPanel,
+    end: PROPOSAL_END,
     plate: '/images/lite/plate-e.webp',
     alt: 'A client proposal draft listing each coverage line and the annual premium',
   },
@@ -595,19 +621,31 @@ const CAPABILITIES = [
     title: 'Prepare service and renewal work',
     body: 'Use information already on the account to prepare certificates, endorsements, and renewal work.',
     Panel: ServicePanel,
+    end: SERVICE_END,
     plate: '/images/lite/plate-f.webp',
-    alt: 'A prepared certificate of insurance showing the insured, the holder and the limits',
+    alt: 'A service and renewal queue: a certificate and an endorsement done, renewal exposures in progress, 22 days to renewal',
   },
 ]
 
+const PANEL_ENDS = CAPABILITIES.map((c) => c.end)
+
 function WhatCooperDoes() {
-  const [active, setActive] = useState(0)
+  const { view, binds, select, hover, focus, attachPlate, attachExit, attachBar } = useSectionClock(PANEL_ENDS)
+  const { active, outgoing, touring } = view
   const current = CAPABILITIES[active]
 
   return (
     <section
       id="work"
       className={`${ANCHOR_OFFSET} bg-cream-light px-[24px] py-[76px] md:px-[40px] lg:px-[62px] lg:py-[100px]`}
+      /* The tour waits while keyboard focus is anywhere in the section (moving between
+         items is not leaving it) or the pointer is on the list, and stops for good on the
+         reader's first pick. Pausing on the whole section would stop it for any mouse user
+         whose pointer simply rests on the page while they read. */
+      onFocus={() => focus(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) focus(false)
+      }}
     >
       <SectionHead
         eyebrow="What Cooper does"
@@ -616,30 +654,24 @@ function WhatCooperDoes() {
       />
 
       <div className="grid grid-cols-1 gap-[26px] lg:grid-cols-[minmax(300px,31%)_1fr] lg:gap-[40px]">
-        <div className="flex flex-col">
+        <div className="flex flex-col" onPointerEnter={() => hover(true)} onPointerLeave={() => hover(false)}>
           {CAPABILITIES.map((cap, i) => {
             const on = i === active
             return (
               <button
                 key={cap.n}
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => select(i)}
                 aria-current={on}
-                className={`border-b border-lite-line text-left transition-colors duration-200 last:border-b-0 ${
+                className={`relative border-b border-lite-line text-left transition-colors duration-200 last:border-b-0 ${
                   on ? 'border-b-transparent bg-lite-surface px-[20px] py-[18px]' : 'px-[20px] py-[16px] hover:bg-lite-surface/50'
                 }`}
               >
                 <span className="mb-[6px] flex items-center gap-[9px]">
-                  <span className="font-grotesk text-[11px] tabular-nums text-accent-orange">
-                    {cap.n}
-                  </span>
-                  <span className="font-grotesk text-[10px] uppercase tracking-[.14em] text-muted">
-                    {cap.stage}
-                  </span>
+                  <span className="font-grotesk text-[11px] tabular-nums text-accent-orange">{cap.n}</span>
+                  <span className="font-grotesk text-[10px] uppercase tracking-[.14em] text-muted">{cap.stage}</span>
                 </span>
-                <span className="block font-serif text-[19px] leading-[1.25] text-dark-2">
-                  {cap.title}
-                </span>
+                <span className="block font-serif text-[19px] leading-[1.25] text-dark-2">{cap.title}</span>
                 {/* Only the open row carries its description, so the column stays a
                     list of titles rather than six paragraphs competing at once. */}
                 {on && (
@@ -655,39 +687,47 @@ function WhatCooperDoes() {
                     {cap.body}
                   </span>
                 )}
+                {/* The tour's progress: fills across the panel and its rest, then the next row opens. */}
+                {on && touring && (
+                  <span aria-hidden className="absolute inset-x-0 bottom-0 h-[2px] bg-lite-line">
+                    <span
+                      ref={attachBar}
+                      data-tour-bar
+                      className="block h-full origin-left bg-dark-2/50"
+                      style={{ transform: 'scaleX(0)' }}
+                    />
+                  </span>
+                )}
               </button>
             )
           })}
         </div>
 
-        {/* The plate is the brand book's reeded-glass texture, generated for this
-            use. Keeping it as a CSS background rather than baking it into the
-            panel means one file serves all six. */}
+        {/* The plate is the brand book's reeded-glass texture; each capability has its own. It is
+            also what the clock watches: the panels play once at least 30% of it is on screen.
+            `role`/`aria-label` because this is a picture of a screen: a screen reader gets the
+            sentence and moves on. The panel that is leaving lies on top of the new one for seven
+            frames while it rises and blurs out. */}
         <div
+          ref={attachPlate}
           className="relative flex min-h-[280px] items-center justify-center overflow-hidden bg-dark-2 bg-cover bg-center p-[18px] transition-[background-image] duration-300 sm:p-[42px] lg:min-h-[520px] lg:p-[56px]"
           style={{ backgroundImage: `url(${current.plate})` }}
         >
-          {/* 16:10 from `sm` up, the ratio the screenshots held. The six panels
-              do not carry the same number of rows, so without a ratio to sit in
-              the plate would resize under the reader every time they picked a
-              different capability.
-
-              Below `sm` the ratio comes off, because a phone-width card at
-              16:10 is 191px tall and the content needs 293, so the last rows
-              were being clipped. Letting height follow content there costs
-              nothing: measured at 320 to 430 the six panels want within 2px of
-              each other, so there is no jump left to prevent.
-
-              `role`/`aria-label` because this is a picture of a screen, not a
-              table anyone should be made to navigate: a screen reader gets the
-              one sentence that describes it and moves on. */}
-          <div
-            key={current.title}
-            role="img"
-            aria-label={current.alt}
-            className="animate-fade-in w-full max-w-[640px] shadow-[0_28px_70px_-14px_rgba(29,26,23,.5)] sm:aspect-[16/10]"
-          >
-            <current.Panel />
+          <div role="img" aria-label={current.alt} className="relative w-full max-w-[640px]">
+            {CAPABILITIES.map((cap, i) => {
+              if (i !== active && i !== outgoing) return null
+              const leaving = i === outgoing
+              const panel = <cap.Panel bind={binds[i]} />
+              return (
+                <div
+                  key={cap.n}
+                  ref={leaving ? attachExit : undefined}
+                  className={leaving ? 'absolute inset-x-0 top-0 z-[1]' : 'relative'}
+                >
+                  {panel}
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
@@ -1038,9 +1078,9 @@ function Closing() {
         <div className="lg:col-start-1 lg:row-start-2">
           <a
             href={SIGNUP_URL}
-            className="flex items-center justify-center gap-[12px] rounded-full bg-accent-orange px-[32px] py-[22px] text-[17px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
+            className="flex items-center justify-center rounded-full bg-accent-orange px-[32px] py-[22px] text-[17px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
           >
-            Get started <ArrowRight size={18} weight="bold" />
+            Get started
           </a>
           {/* The terms belong to this button, so they sit under it rather than
               centred under the whole block, which is where the hero puts them
