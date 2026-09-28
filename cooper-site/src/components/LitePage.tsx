@@ -1038,9 +1038,9 @@ function Closing() {
         <div className="lg:col-start-1 lg:row-start-2">
           <a
             href={SIGNUP_URL}
-            className="flex items-center justify-center gap-[12px] rounded-full bg-accent-orange px-[32px] py-[22px] text-[17px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
+            className="flex items-center justify-center rounded-full bg-accent-orange px-[32px] py-[22px] text-[17px] font-medium text-white transition-colors duration-200 hover:bg-accent-orange-deep"
           >
-            Get started <ArrowRight size={18} weight="bold" />
+            Get started
           </a>
           {/* The terms belong to this button, so they sit under it rather than
               centred under the whole block, which is where the hero puts them
